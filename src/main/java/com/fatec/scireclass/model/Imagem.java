@@ -2,6 +2,7 @@ package com.fatec.scireclass.model;
 
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -11,6 +12,8 @@ public class Imagem {
     private String id;
     private String nome;
     private Binary image;
+    @DBRef
+    private Curso curso;
 
     public String getId() {
         return id;
@@ -29,6 +32,12 @@ public class Imagem {
     }
     public void setImage(Binary image) {
         this.image = image;
+    }
+    public Curso getCurso() {
+        return curso;
+    }
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 
     
