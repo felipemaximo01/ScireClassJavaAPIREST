@@ -13,7 +13,6 @@ import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.enums.Perfil;
-import com.fatec.scireclass.model.mapper.EnderecoMapper;
 import com.fatec.scireclass.model.mapper.UsuarioMapper;
 import com.fatec.scireclass.repository.CursoRepository;
 import com.fatec.scireclass.repository.TokenSenhaResetRepository;
