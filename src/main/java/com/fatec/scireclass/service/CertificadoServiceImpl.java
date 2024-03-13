@@ -3,6 +3,7 @@ package com.fatec.scireclass.service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Certificado;
@@ -15,7 +16,6 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
-@Service
 public class CertificadoServiceImpl implements CertificadoService {
 
     private Certificado certificado = new Certificado();
@@ -29,18 +29,18 @@ public class CertificadoServiceImpl implements CertificadoService {
         certificado.setCaminho(caminhoc);
         certificado.setNome("Certificado"+matricula.getNumeroMatricula()+".pdf");
         certificado.setMatricula(matricula);
-        certificado.setDocument(new Document());
+        certificado.getDocument().setCertificado(new Document());
         try{
-            PdfWriter.getInstance(certificado.getDocument(),new FileOutputStream(certificado.getCaminho()));
+            PdfWriter.getInstance(certificado.getDocument().getCertificado(),new FileOutputStream(certificado.getCaminho()));
 
-            certificado.getDocument().open();
+            certificado.getDocument().getCertificado().open();
             Image logo = Image.getInstance(CAMINHOIMAGEM);
             logo.setAlignment(Element.ALIGN_CENTER);
-            certificado.getDocument().add(new Paragraph(" "));
-            certificado.getDocument().add(new Paragraph(" "));
-            certificado.getDocument().add(logo);
-            certificado.getDocument().add(new Paragraph(" "));
-            certificado.getDocument().add(new Paragraph(" "));
+            certificado.getDocument().getCertificado().add(new Paragraph(" "));
+            certificado.getDocument().getCertificado().add(new Paragraph(" "));
+            certificado.getDocument().getCertificado().add(logo);
+            certificado.getDocument().getCertificado().add(new Paragraph(" "));
+            certificado.getDocument().getCertificado().add(new Paragraph(" "));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
@@ -51,18 +51,18 @@ public class CertificadoServiceImpl implements CertificadoService {
         Paragraph paragrafoTitulo = new Paragraph();
         paragrafoTitulo.setAlignment(Element.ALIGN_CENTER);
         paragrafoTitulo.add(new Chunk("CERTIFICADO "+certificado.getMatricula().getCurso().getNome(),new Font(Font.HELVETICA,24)));
-        certificado.getDocument().add(paragrafoTitulo);
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(paragrafoTitulo);
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
     }
     @Override
     public void gerarCorpo() {
         Paragraph paragrafoCorpo = new Paragraph();
         paragrafoCorpo.setAlignment(Element.ALIGN_JUSTIFIED);
         paragrafoCorpo.add(new Chunk("Certificamos que "+certificado.getMatricula().getAluno().getNome()+" "+certificado.getMatricula().getAluno().getSobrenome()+", portador(a)  do documento CPF "+certificado.getMatricula().getAluno().getCpf()+", concluiu com aproveitamento o curso acima identificado, com duração de "+certificado.getMatricula().getCurso().getDuracao()+" horas, no período de "+certificado.getMatricula().getDataInicio()+" à "+certificado.getMatricula().getDataFim()+".",new Font(Font.HELVETICA,16)));
-        certificado.getDocument().add(paragrafoCorpo);
-        certificado.getDocument().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(paragrafoCorpo);
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
     }
     @Override
     public void gerarRodape() {
@@ -72,26 +72,26 @@ public class CertificadoServiceImpl implements CertificadoService {
         Paragraph paragrafoassinatura=new Paragraph();
         paragrafoassinatura.setAlignment(Element.ALIGN_CENTER);
         paragrafoassinatura.add(new Chunk("___________________________", new Font(Font.HELVETICA,16)));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(paragrafoRodape);
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(new Paragraph(" "));
-        certificado.getDocument().add(paragrafoassinatura);
-        certificado.getDocument().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(paragrafoRodape);
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
+        certificado.getDocument().getCertificado().add(paragrafoassinatura);
+        certificado.getDocument().getCertificado().add(new Paragraph(" "));
     }
     @Override
     public Certificado imprimir() {
         gerarCabecalho();
         gerarCorpo();
         gerarRodape();
-        if(this.certificado.getDocument()!=null && this.certificado.getDocument().isOpen()){
-            certificado.getDocument().close();
+        if(this.certificado.getDocument()!=null && this.certificado.getDocument().getCertificado().isOpen()){
+            certificado.getDocument().getCertificado().close();
             return certificado;
         }
         return null;

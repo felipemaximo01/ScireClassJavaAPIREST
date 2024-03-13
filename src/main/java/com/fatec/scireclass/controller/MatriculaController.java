@@ -44,7 +44,7 @@ public class MatriculaController {
     }
 
    
-    @GetMapping("/findalunoandcurso/{usuarioId}/}cursoId}")
+    @GetMapping("/findalunoandcurso/{usuarioId}/{cursoId}")
     public ResponseEntity<MatriculaDTO> buscarMatriculaPorAlunoCurso(@PathVariable String usuarioId, @PathVariable String cursoId){
         return new ResponseEntity<>(this.matriculaService.encontramatriculaporAlunoECurso(usuarioId,cursoId), HttpStatus.OK);
     }

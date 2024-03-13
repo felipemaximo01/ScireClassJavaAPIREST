@@ -1,8 +1,8 @@
 package com.fatec.scireclass.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import com.lowagie.text.Document;
 
 @org.springframework.data.mongodb.core.mapping.Document
 public class Certificado {
@@ -11,7 +11,8 @@ public class Certificado {
     private String nome;
     @DBRef
     private Matricula matricula;
-    private Document document;
+    @Transient
+    private CertificadoDocument document;
     private String caminho;
     
     public String getId() {
@@ -26,10 +27,10 @@ public class Certificado {
     public void setMatricula(Matricula matricula) {
         this.matricula = matricula;
     }
-    public Document getDocument() {
+    public CertificadoDocument getDocument() {
         return document;
     }
-    public void setDocument(Document document) {
+    public void setDocument(CertificadoDocument document) {
         this.document = document;
     }
     public String getCaminho() {

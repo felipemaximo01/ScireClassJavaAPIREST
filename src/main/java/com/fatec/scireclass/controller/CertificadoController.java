@@ -45,7 +45,7 @@ public class CertificadoController {
             throw new MatriculaNaoFinalizadaException("A matricula de número: " +  matricula.getNumeroMatricula() + " não está finalizada");
         }
 
-        CertificadoService certificadoService = new CertificadoServiceImpl(matricula);
+        CertificadoServiceImpl certificadoService = new CertificadoServiceImpl(matricula);
         Certificado certificado = certificadoService.imprimir();
         try {
             var file = new File(certificado.getCaminho());

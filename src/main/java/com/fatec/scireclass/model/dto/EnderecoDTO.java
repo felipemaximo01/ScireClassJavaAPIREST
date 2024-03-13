@@ -1,8 +1,5 @@
 package com.fatec.scireclass.model.dto;
 
-import com.fatec.scireclass.model.Curso;
-import com.fatec.scireclass.model.Usuario;
-
 public class EnderecoDTO {
     private String id;
 
@@ -12,9 +9,7 @@ public class EnderecoDTO {
     private String bairro;
     private String localidade;
     private String uf;
-    private Usuario usuario;
-    private Curso curso;
-    
+
     public String getId() {
         return id;
     }
@@ -57,18 +52,5 @@ public class EnderecoDTO {
     public void setUf(String uf) {
         this.uf = uf;
     }
-    public Usuario getUsuario() {
-        return usuario;
-    }
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-    public Curso getCurso() {
-        return curso;
-    }
-    public void setCurso(Curso curso) {
-        this.curso = curso;
-    }
-
     
 }
