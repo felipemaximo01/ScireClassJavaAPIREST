@@ -16,14 +16,14 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
 @Service
-public class CertificadoServicelImpl implements CertificadoService {
+public class CertificadoServiceImpl implements CertificadoService {
 
     private Certificado certificado = new Certificado();
 
     private static final String CAMINHOIMAGEM = "src/main/resources/img/logo_aprendex.png";
     private static final String CAMINHO = "src/main/resouces/certificados";
 
-    public CertificadoServicelImpl(Matricula matricula){
+    public CertificadoServiceImpl(Matricula matricula){
 
         String caminhoc=CAMINHO+"/Certificado"+matricula.getNumeroMatricula()+".pdf";
         certificado.setCaminho(caminhoc);

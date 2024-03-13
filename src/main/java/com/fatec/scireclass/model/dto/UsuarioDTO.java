@@ -1,18 +1,11 @@
-package com.fatec.scireclass.model;
+package com.fatec.scireclass.model.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fatec.scireclass.model.enums.Perfil;
 
-@Document
-public class Usuario {
+public class UsuarioDTO {
 
-    @Id
     private String id;
     private String nome;
     private String sobrenome;
@@ -26,19 +19,8 @@ public class Usuario {
     private String telefone;
     private Integer perfil;
     private Boolean ativo;
-    @DBRef
-    private List<Chat> chat;
-    @DBRef
-    private List<Curso> cursoFavorito;
-    @DBRef
-    private List<Certificado> certificados;
-    @DBRef
-    private List<Matricula> matriculas;
-    @DBRef
-    private List<Comentario> comentarios;
-    @DBRef
-    private Endereco endereco;
-    
+    private EnderecoDTO enderecoDTO;
+
     public String getId() {
         return id;
     }
@@ -87,12 +69,6 @@ public class Usuario {
     public void setAvaliacao(Double avaliacao) {
         this.avaliacao = avaliacao;
     }
-    public List<Curso> getCursoFavorito() {
-        return cursoFavorito;
-    }
-    public void setCursoFavorito(List<Curso> cursoFavorito) {
-        this.cursoFavorito = cursoFavorito;
-    }
     public String getCnpj() {
         return cnpj;
     }
@@ -111,12 +87,6 @@ public class Usuario {
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    public Endereco getEndereco() {
-        return endereco;
-    }
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
     public Perfil getPerfil() {
         return Perfil.valueOf(perfil);
     }
@@ -131,30 +101,12 @@ public class Usuario {
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
-    public List<Chat> getChat() {
-        return chat;
+    public EnderecoDTO getEnderecoDTO() {
+        return enderecoDTO;
     }
-    public void setChat(List<Chat> chat) {
-        this.chat = chat;
+    public void setEnderecoDTO(EnderecoDTO enderecoDTO) {
+        this.enderecoDTO = enderecoDTO;
     }
-    public List<Certificado> getCertificados() {
-        return certificados;
-    }
-    public void setCertificados(List<Certificado> certificados) {
-        this.certificados = certificados;
-    }
-    public List<Matricula> getMatriculas() {
-        return matriculas;
-    }
-    public void setMatriculas(List<Matricula> matriculas) {
-        this.matriculas = matriculas;
-    }
-    public List<Comentario> getComentarios() {
-        return comentarios;
-    }
-    public void setComentarios(List<Comentario> comentarios) {
-        this.comentarios = comentarios;
-    }
-    
+
     
 }

@@ -6,7 +6,8 @@ import com.fatec.scireclass.model.Certificado;
 
 @Service
 public interface CertificadoService {
-
+    
+    
     public void gerarCabecalho();
     public void gerarCorpo();
     public void gerarRodape();

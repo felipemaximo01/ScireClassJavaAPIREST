@@ -8,8 +8,8 @@ import com.lowagie.text.Document;
 public class Certificado {
     @Id
     private String id;
-    @DBRef
     private String nome;
+    @DBRef
     private Matricula matricula;
     private Document document;
     private String caminho;
@@ -44,6 +44,5 @@ public class Certificado {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
     
 }

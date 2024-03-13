@@ -9,10 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Curso;
+import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.Usuario;
-import com.fatec.scireclass.model.UsuarioRepository;
+import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.enums.Perfil;
+import com.fatec.scireclass.model.mapper.EnderecoMapper;
+import com.fatec.scireclass.model.mapper.UsuarioMapper;
 import com.fatec.scireclass.repository.CursoRepository;
+import com.fatec.scireclass.repository.TokenSenhaResetRepository;
+import com.fatec.scireclass.repository.UsuarioRepository;
+import com.fatec.scireclass.service.exceptions.EmailInvalidoException;
+import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
@@ -20,19 +27,22 @@ public class UsuarioServiceImpl implements UsuarioService{
     private UsuarioRepository usuarioRepository;
     @Autowired
     private CursoRepository cursoRepository;
+    @Autowired
+    private TokenSenhaResetRepository tokenSenhaResetRepository;
 
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
     @Override
-    public Usuario cadastrar(Usuario usuario) {
-        if(Boolean.FALSE.equals(encontrarEmail(usuario.getEmail()))) {
-            if (validaEmail(usuario)){
-                return this.usuarioRepository.save(usuario);
+    public UsuarioDTO cadastrar(UsuarioDTO usuarioDTO) {
+        if(Boolean.FALSE.equals(encontrarEmail(usuarioDTO.getEmail()))) {
+            if (validaEmail(usuarioDTO)){
+                Usuario usuario = this.usuarioRepository.save(UsuarioMapper.usuarioDTOToUsuario(usuarioDTO));
+                return UsuarioMapper.usuarioToUsuarioDTO(usuario);
             }else {
-                throw new IllegalStateException("Email inválido");
+                throw new EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " já está cadastrado");
             }
         }else {
-            throw new IllegalStateException("Email já cadastrado");
+            throw new  EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " já está cadastrado");
         }
     }
 
@@ -54,9 +64,9 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public boolean validaEmail(Usuario usuario){
+    public boolean validaEmail(UsuarioDTO usuarioDTO){
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        Matcher matcher = pattern.matcher(usuario.getEmail());
+        Matcher matcher = pattern.matcher(usuarioDTO.getEmail());
         return matcher.matches();
     }
 
@@ -83,36 +93,36 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
-    public Usuario alteraDados(Usuario usuarioAltera){
+    public Usuario alteraDados(UsuarioDTO usuarioDTO, String usuarioId){
 
-        Usuario usuario = this.usuarioRepository.findUsuarioById(usuarioAltera.getId());
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
 
-        if(usuarioAltera.getLogin() != null){
-            usuario.setLogin(usuarioAltera.getLogin());
+        if(usuario == null)
+            throw new UsuarioNotFoundException("O usuário com ID: " + usuarioId + " não foi encontrado");
+
+        if(usuarioDTO.getLogin() != null){
+            usuario.setLogin(usuarioDTO.getLogin());
         }
-        if(usuarioAltera.getNome() != null){
-            usuario.setNome(usuarioAltera.getNome());
+        if(usuarioDTO.getNome() != null){
+            usuario.setNome(usuarioDTO.getNome());
         }
-        if(usuarioAltera.getSobrenome() != null){
-            usuario.setSobrenome(usuarioAltera.getSobrenome());
+        if(usuarioDTO.getSobrenome() != null){
+            usuario.setSobrenome(usuarioDTO.getSobrenome());
         }
-        if(usuarioAltera.getTelefone() != null){
-            usuario.setTelefone(usuarioAltera.getTelefone());
+        if(usuarioDTO.getTelefone() != null){
+            usuario.setTelefone(usuarioDTO.getTelefone());
         }
-        if(usuarioAltera.getDataNascimento() != null){
-            usuario.setDataNascimento(usuarioAltera.getDataNascimento());
+        if(usuarioDTO.getDataNascimento() != null){
+            usuario.setDataNascimento(usuarioDTO.getDataNascimento());
         }
-        if(usuarioAltera.getLogin() != null){
-            usuario.setSenha(usuarioAltera.getSenha());
+        if(usuarioDTO.getSenha() != null){
+            usuario.setSenha(usuarioDTO.getSenha());
         }
-        if(usuarioAltera.getEndereco() != null){
-            usuario.setEndereco(usuarioAltera.getEndereco());
+        if(usuarioDTO.getAtivo() != null){
+            usuario.setAtivo(usuarioDTO.getAtivo());
         }
-        if(usuarioAltera.getAtivo() != null){
-            usuario.setAtivo(usuarioAltera.getAtivo());
-        }
-        this.usuarioRepository.save(usuario);
-        return usuario;
+
+        return this.usuarioRepository.save(usuario);
     }
 
     @Override
@@ -133,7 +143,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         Usuario usuarioFind = usuarioRepository.findUsuarioByEmailAndSenha(email,senha);
         if(usuarioFind  != null)
             return usuarioFind;
-        throw new IllegalStateException("usuário não encontrado");
+        throw new UsuarioNotFoundException("usuário não encontrado");
     }
 
     @Override
@@ -144,6 +154,8 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public Boolean favoritado(String usuarioId, String cursoId) {
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
+        if(usuario == null)
+            throw new UsuarioNotFoundException("usuário não encontrado");
         for(int i = 0; i < usuario.getCursoFavorito().size(); i++){
             if(usuario.getCursoFavorito().get(i).getId().equals(cursoId))
                 return true;
@@ -163,5 +175,20 @@ public class UsuarioServiceImpl implements UsuarioService{
         }
 
         return false;
+    }
+
+    @Override
+    public Usuario mudarSenha(TokenSenhaReset tokenSenhaReset, String senha) {
+        Usuario usuario = usuarioRepository.findUsuarioById(tokenSenhaReset.getUsuario().getId());
+        if(usuario == null)
+            throw new UsuarioNotFoundException("O usuário não foi encontrado");
+        usuario.setSenha(senha);
+        tokenSenhaResetRepository.deleteTokenSenhaByUsuarioEmail(usuario.getEmail());
+        return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public Usuario salvaUsuario(Usuario usuario){
+        return usuarioRepository.save(usuario);
     }
 }

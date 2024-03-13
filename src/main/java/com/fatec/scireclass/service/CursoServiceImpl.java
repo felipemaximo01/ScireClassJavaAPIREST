@@ -12,7 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fatec.scireclass.model.Categoria;
 import com.fatec.scireclass.model.Curso;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.CursoDTO;
+import com.fatec.scireclass.model.mapper.CursoMapper;
 import com.fatec.scireclass.repository.CursoRepository;
+import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
 
 @Service
 public class CursoServiceImpl implements CursoService {
@@ -20,22 +23,38 @@ public class CursoServiceImpl implements CursoService {
     private CursoRepository cursoRepository;
     @Autowired
     private ImagemService imagemService;
+    @Autowired
+    private CategoriaService categoriaService;
 
     @Override
-    public Curso cadastrarCurso(Curso curso, MultipartFile file) throws GeneralSecurityException, IOException {
-        Curso cursoSalvo = cursoRepository.save(curso);
-        imagemService.addImage(curso.getNome() + "Imagem", cursoSalvo, file);
-        return cursoSalvo;
+    public CursoDTO cadastrarCurso(CursoDTO cursoDTO, MultipartFile file) throws GeneralSecurityException, IOException {
+        
+        Curso curso = CursoMapper.cursoDTOToCurso(cursoDTO);
+        curso = cursoRepository.save(curso);
+        imagemService.addImage(curso.getNome() + "Imagem", curso, file);
+        return CursoMapper.cursoToCursoDTO(curso);
     }
 
     @Override
-    public List<Curso> encontrarDesc(String desc) {
-        return this.cursoRepository.findByDescricaoLikeIgnoreCase(desc);
+    public List<CursoDTO> encontrarDesc(String desc) {
+        List<Curso> cursos = cursoRepository.findByDescricaoLikeIgnoreCase(desc);
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+            cursoDTOs.add(cursoDTO);
+        }
+        return cursoDTOs;
     }
 
     @Override
-    public List<Curso> encontrarNome(String nome) {
-        return this.cursoRepository.findByNomeLikeIgnoreCase(nome);
+    public List<CursoDTO> encontrarNome(String nome) {
+        List<Curso> cursos = cursoRepository.findByDescricaoLikeIgnoreCase(nome);
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+            cursoDTOs.add(cursoDTO);
+        }
+        return cursoDTOs;
     }
 
     @Override
@@ -44,73 +63,110 @@ public class CursoServiceImpl implements CursoService {
     }
 
     @Override
-    public Curso encontrarId(String id) {
-        return this.cursoRepository.findCursoById(id);
+    public CursoDTO encontrarId(String id) {
+        Curso curso = cursoRepository.findCursoById(id);
+        CursoDTO cursoDTO = new CursoDTO();
+        if(curso != null){
+            cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+        }
+        return cursoDTO;
     }
 
     @Override
-    public List<Curso> topCurso(){
-        return this.cursoRepository.findAll();
+    public List<CursoDTO> topCurso(){
+        List<Curso> cursos = cursoRepository.findAll();
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+            cursoDTOs.add(cursoDTO);
+        }
+        return cursoDTOs;
     }
 
     @Override
-    public List<Curso> cursodaCategoria(Categoria categoria) {
-        return this.cursoRepository.findByCategoria(categoria);
+    public List<CursoDTO> cursodaCategoria(String categoriaId) {
+        Categoria categoria = categoriaService.categoriaPorId(categoriaId);
+        List<Curso> cursos = cursoRepository.findByCategoria(categoria);
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+            cursoDTOs.add(cursoDTO);
+        }
+
+        return cursoDTOs;
     }
 
     @Override
-    public Curso alterarDadosCurso(Curso cursoAlterar) {
-        Curso curso = this.cursoRepository.findCursoById(cursoAlterar.getId());
-        if(cursoAlterar.getNome() != null){
-            curso.setNome(cursoAlterar.getNome());
+    public CursoDTO alterarDadosCurso(CursoDTO cursoDTO, String cursoId) {
+        Curso curso = this.cursoRepository.findCursoById(cursoId);
+        if(curso.getId() == null)
+            throw new CursoNotFoundException("Não foi possivel encontrar o curso com o ID: " + cursoId);
+        if(cursoDTO.getNome() != null){
+            curso.setNome(cursoDTO.getNome());
         }
-        if(cursoAlterar.getDescricao() != null){
-            curso.setDescricao(cursoAlterar.getDescricao());
+        if(cursoDTO.getDescricao() != null){
+            curso.setDescricao(cursoDTO.getDescricao());
         }
-        if(cursoAlterar.getLink() != null){
-            curso.setLink(cursoAlterar.getLink());
+        if(cursoDTO.getLink() != null){
+            curso.setLink(cursoDTO.getLink());
         }
-        if(cursoAlterar.getTelefone() != null){
-            curso.setTelefone(cursoAlterar.getTelefone());
+        if(cursoDTO.getTelefone() != null){
+            curso.setTelefone(cursoDTO.getTelefone());
         }
-        if(cursoAlterar.getCategoria() != null){
-            curso.setCategoria(cursoAlterar.getCategoria());
+        if(cursoDTO.getDuracao() != null){
+            curso.setDuracao(cursoDTO.getDuracao());
         }
-        if(cursoAlterar.getDuracao() != null){
-            curso.setDuracao(cursoAlterar.getDuracao());
+        if(cursoDTO.getEmail() != null){
+            curso.setEmail(cursoDTO.getEmail());
         }
-        if(cursoAlterar.getEmail() != null){
-            curso.setEmail(cursoAlterar.getEmail());
+        if(cursoDTO.getValor() != null){
+            curso.setValor(cursoDTO.getValor());
         }
-        if(cursoAlterar.getValor() != null){
-            curso.setValor(cursoAlterar.getValor());
+        if(cursoDTO.getVagas() != null){
+            curso.setVagas(cursoDTO.getVagas());
         }
-        if(cursoAlterar.getVagas() != null){
-            curso.setVagas(cursoAlterar.getVagas());
-        }
-        return  this.cursoRepository.save(curso);
+
+        curso = cursoRepository.save(curso);
+
+        return CursoMapper.cursoToCursoDTO(curso);
     }
 
     @Override
-    public List<Curso> cursosFavoritos(Usuario usuario) {
+    public List<CursoDTO> cursosFavoritos(Usuario usuario) {
         List<String> cursosId = new ArrayList<>();
         if(!usuario.getCursoFavorito().isEmpty()){
             for(int i = 0; i < usuario.getCursoFavorito().size(); i++) {
                 cursosId.add(usuario.getCursoFavorito().get(i).getId());
             }
         }
-        return this.cursoRepository.findAllById(cursosId);
+
+        List<Curso> cursos = cursoRepository.findAllById(cursosId);
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+            cursoDTOs.add(cursoDTO);
+        }
+        return cursoDTOs;
     }
 
     @Override
-    public List<Curso> cursosCriador(String usuarioId){
-        return this.cursoRepository.findAllByCriador_Id(usuarioId);
+    public List<CursoDTO> cursosCriador(Usuario usuario){
+        List<Curso> cursos = cursoRepository.findAllByCriador_Id(usuario.getId());
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);
+            cursoDTOs.add(cursoDTO);
+        }
+
+        return cursoDTOs;
     }
 
     @Override
-    public Boolean excluirCurso(String cursoId, String usuarioId) {
-        Curso curso = this.cursoRepository.findCursoById(cursoId);
-        if(curso != null && curso.getCriador().getId().equals(usuarioId)){
+    public Boolean excluirCurso(String cursoId, Usuario usuario) {
+        Curso curso =  cursoRepository.findCursoById(cursoId);
+        if(curso == null)
+            throw new CursoNotFoundException("Não foi possivel encontrar o curso com o ID: " + cursoId);
+        if(curso.getCriador().getId().equals(usuario.getId())){
             this.cursoRepository.deleteById(curso.getId());
             return true;
         }

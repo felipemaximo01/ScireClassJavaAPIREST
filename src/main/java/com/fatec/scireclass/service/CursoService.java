@@ -7,31 +7,30 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fatec.scireclass.model.Categoria;
-import com.fatec.scireclass.model.Curso;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.CursoDTO;
 
 @Service
 public interface CursoService {
-    Curso cadastrarCurso(Curso curso, MultipartFile file) throws GeneralSecurityException, IOException;
+    CursoDTO cadastrarCurso(CursoDTO cursoDTO, MultipartFile file) throws GeneralSecurityException, IOException;
 
-    List<Curso> encontrarDesc(String desc);
+    List<CursoDTO> encontrarDesc(String desc);
 
-    List<Curso> encontrarNome(String nome);
+    List<CursoDTO> encontrarNome(String nome);
 
-    Curso encontrarId(String id);
+    CursoDTO encontrarId(String id);
 
     void deletaCurso(String id);
 
-    List<Curso> topCurso();
+    List<CursoDTO> topCurso();
 
-    List<Curso> cursodaCategoria(Categoria categoria);
+    List<CursoDTO> cursodaCategoria(String categoriaId);
 
-    Curso alterarDadosCurso(Curso curso);
+    CursoDTO alterarDadosCurso(CursoDTO cursoDTO,String cursoId);
 
-    List<Curso> cursosFavoritos(Usuario usuario);
+    List<CursoDTO> cursosFavoritos(Usuario usuario);
 
-    List<Curso> cursosCriador(String usuarioId);
+    List<CursoDTO> cursosCriador(Usuario usuario);
 
-    Boolean excluirCurso(String cursoId, String usuarioId);
+    Boolean excluirCurso(String cursoId, Usuario usuario);
 }
