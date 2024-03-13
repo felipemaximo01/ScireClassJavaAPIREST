@@ -29,16 +29,17 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Autowired
     private TokenSenhaResetRepository tokenSenhaResetRepository;
 
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
     @Override
-    public UsuarioDTO cadastrar(UsuarioDTO usuarioDTO) {
+    public Usuario cadastrar(UsuarioDTO usuarioDTO) {
         if(Boolean.FALSE.equals(encontrarEmail(usuarioDTO.getEmail()))) {
             if (validaEmail(usuarioDTO)){
-                Usuario usuario = this.usuarioRepository.save(UsuarioMapper.usuarioDTOToUsuario(usuarioDTO));
-                return UsuarioMapper.usuarioToUsuarioDTO(usuario);
+                Usuario usuario = UsuarioMapper.usuarioDTOToUsuario(usuarioDTO);
+                usuario.setAtivo(false);
+                return this.usuarioRepository.save(usuario);
             }else {
-                throw new EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " já está cadastrado");
+                throw new EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " não é um email válido");
             }
         }else {
             throw new  EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " já está cadastrado");

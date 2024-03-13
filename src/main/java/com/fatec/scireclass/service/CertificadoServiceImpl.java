@@ -3,9 +3,6 @@ package com.fatec.scireclass.service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.fatec.scireclass.model.Certificado;
 import com.fatec.scireclass.model.Matricula;
 import com.lowagie.text.Chunk;

@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 
 import com.fatec.scireclass.model.Certificado;
 import com.fatec.scireclass.model.Matricula;
-import com.fatec.scireclass.service.CertificadoService;
 import com.fatec.scireclass.service.CertificadoServiceImpl;
 import com.fatec.scireclass.service.MatriculaService;
 import com.fatec.scireclass.service.exceptions.MatriculaNaoFinalizadaException;

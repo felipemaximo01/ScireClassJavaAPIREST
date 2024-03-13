@@ -8,7 +8,7 @@ import com.fatec.scireclass.model.dto.UsuarioDTO;
 
 @Service
 public interface UsuarioService {
-    UsuarioDTO cadastrar(UsuarioDTO usuario);
+    Usuario cadastrar(UsuarioDTO usuario);
 
     Boolean encontrarEmail(String email);
 

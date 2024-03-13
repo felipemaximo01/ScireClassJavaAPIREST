@@ -24,7 +24,6 @@ public class UsuarioMapper {
             usuario.setCpf(usuarioDTO.getCpf());
         usuario.setTelefone(usuarioDTO.getTelefone());
         usuario.setPerfil(usuarioDTO.getPerfil());
-        usuario.setEndereco(EnderecoMapper.enderecoDTOToEndereco(usuarioDTO.getEnderecoDTO()));
 
         return usuario;
     }
@@ -39,13 +38,12 @@ public class UsuarioMapper {
         usuarioDTO.setSenha(usuario.getSenha());
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setDataNascimento(usuario.getDataNascimento());
-        if(usuarioDTO.getCnpj() != null)
+        if(usuario.getCnpj() != null)
             usuarioDTO.setCnpj(usuario.getCnpj());
-        if(usuarioDTO.getCpf() != null)
+        if(usuario.getCpf() != null)
             usuarioDTO.setCpf(usuario.getCpf());
         usuarioDTO.setTelefone(usuario.getTelefone());
         usuarioDTO.setPerfil(usuario.getPerfil());
-        usuarioDTO.setEnderecoDTO(EnderecoMapper.enderecoToEnderecoDTO(usuario.getEndereco()));
 
         return usuarioDTO;
     }

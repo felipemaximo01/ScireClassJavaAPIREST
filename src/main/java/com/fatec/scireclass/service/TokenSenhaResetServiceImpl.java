@@ -3,12 +3,14 @@ package com.fatec.scireclass.service;
 import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.repository.TokenSenhaResetRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TokenSenhaResetServiceImpl implements TokenSenhaResetService {
 
-
+    @Autowired
     private TokenSenhaResetRepository tokenSenhaResetRepository;
 
     public void criarTokenSenha(Usuario usuario, String token) {

@@ -20,8 +20,6 @@ public class CursoMapper {
         curso.setEmail(cursoDTO.getEmail());
         curso.setValor(cursoDTO.getValor());
         curso.setVagas(cursoDTO.getVagas());
-        curso.setEndereco(EnderecoMapper.enderecoDTOToEndereco(cursoDTO.getEndereco()));
-        curso.setCategoria(CategoriaMapper.categoriaDTOToCategoria(cursoDTO.getCategoria()));
 
         return curso;
     }
@@ -38,8 +36,6 @@ public class CursoMapper {
         cursoDTO.setEmail(curso.getEmail());
         cursoDTO.setValor(curso.getValor());
         cursoDTO.setVagas(curso.getVagas());
-        cursoDTO.setEndereco(EnderecoMapper.enderecoToEnderecoDTO(curso.getEndereco()));
-        cursoDTO.setCategoria(CategoriaMapper.categoriaToCategoriaDTO(curso.getCategoria()));
 
         return cursoDTO;
     }

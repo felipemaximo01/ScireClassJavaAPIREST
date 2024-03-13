@@ -12,8 +12,6 @@ public class CursoDTO {
     private Double avaliacao;
     private Integer vagas;
     private Boolean ativo;
-    private EnderecoDTO endereco;
-    private CategoriaDTO categoria;
 
     public String getId() {
         return id;
@@ -80,18 +78,6 @@ public class CursoDTO {
     }
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
-    }
-    public EnderecoDTO getEndereco() {
-        return endereco;
-    }
-    public void setEndereco(EnderecoDTO endereco) {
-        this.endereco = endereco;
-    }
-    public CategoriaDTO getCategoria() {
-        return categoria;
-    }
-    public void setCategoria(CategoriaDTO categoria) {
-        this.categoria = categoria;
     }
 
     

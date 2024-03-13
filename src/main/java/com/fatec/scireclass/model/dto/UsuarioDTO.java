@@ -19,7 +19,6 @@ public class UsuarioDTO {
     private String telefone;
     private Integer perfil;
     private Boolean ativo;
-    private EnderecoDTO enderecoDTO;
 
     public String getId() {
         return id;
@@ -101,12 +100,5 @@ public class UsuarioDTO {
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
-    public EnderecoDTO getEnderecoDTO() {
-        return enderecoDTO;
-    }
-    public void setEnderecoDTO(EnderecoDTO enderecoDTO) {
-        this.enderecoDTO = enderecoDTO;
-    }
-
     
 }

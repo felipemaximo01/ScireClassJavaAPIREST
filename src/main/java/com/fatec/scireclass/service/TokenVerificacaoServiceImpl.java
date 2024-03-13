@@ -3,11 +3,14 @@ package com.fatec.scireclass.service;
 import com.fatec.scireclass.model.TokenVerificacao;
 import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.repository.TokenVerificacaoRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TokenVerificacaoServiceImpl implements TokenVerificacaoService {
 
+    @Autowired
     private TokenVerificacaoRepository tokenVerificacaoRepository;
 
     @Override
