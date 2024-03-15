@@ -45,6 +45,11 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/usuario/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/usuario/save").permitAll()
+            .requestMatchers(HttpMethod.PUT, "/usuario/confirmarCadastro").permitAll()
+            .requestMatchers(HttpMethod.PUT, "/usuario/mudarSenha/{token}").permitAll()
+            .requestMatchers(HttpMethod.GET, "/usuario/resetSenha/{email}").permitAll()
+            .requestMatchers(HttpMethod.GET, "/usuario/reenviarVerificacao").permitAll()
+            .requestMatchers(HttpMethod.GET, "/usuario/getToken").permitAll()
             .requestMatchers(AUTH_WHITELIST).permitAll()
             .anyRequest().authenticated()
             )

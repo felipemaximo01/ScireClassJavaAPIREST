@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +55,7 @@ public class UsuarioController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private com.fatec.scireclass.service.TokenService tokenService;
+
 
     @PostMapping("/save")
     public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO, HttpServletRequest request) {
@@ -139,11 +139,8 @@ public class UsuarioController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(), usuarioDTO.getSenha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        Usuario usuario = this.usuarioService.login(usuarioDTO.getEmail(), usuarioDTO.getSenha());
-        if(usuario == null) 
-            throw new UsuarioNotFoundException("O usuário com email: " + usuarioDTO.getEmail() + " não foi encontrado");
-        if(Boolean.FALSE.equals(usuario.getAtivo()))
-            throw new UsuarioDesativadoException("O usuário com email:" + usuarioDTO.getEmail() + " está desativado");
+        if(auth == null) 
+            throw new UsuarioNotFoundException("Não foi possivel realizar o login");
         
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
         
