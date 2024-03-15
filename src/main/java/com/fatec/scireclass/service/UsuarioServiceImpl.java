@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Curso;
@@ -37,6 +38,8 @@ public class UsuarioServiceImpl implements UsuarioService{
             if (validaEmail(usuarioDTO)){
                 Usuario usuario = UsuarioMapper.usuarioDTOToUsuario(usuarioDTO);
                 usuario.setAtivo(false);
+                String encryptedPassword = new BCryptPasswordEncoder().encode(usuario.getSenha());
+                usuario.setSenha(encryptedPassword);
                 return this.usuarioRepository.save(usuario);
             }else {
                 throw new EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " não é um email válido");

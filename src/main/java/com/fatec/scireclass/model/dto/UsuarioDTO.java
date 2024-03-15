@@ -17,7 +17,7 @@ public class UsuarioDTO {
     private String cnpj;
     private String cpf;
     private String telefone;
-    private Integer perfil;
+    private Perfil perfil;
     private Boolean ativo;
 
     public String getId() {
@@ -87,12 +87,11 @@ public class UsuarioDTO {
         this.telefone = telefone;
     }
     public Perfil getPerfil() {
-        return Perfil.valueOf(perfil);
+        return perfil;
     }
     public void setPerfil(Perfil perfil) {
-        if (perfil != null) {
-            this.perfil = perfil.getCode();
-        }
+        this.perfil = perfil;
+
     }
     public Boolean getAtivo() {
         return ativo;

@@ -3,9 +3,12 @@ package com.fatec.scireclass.repository;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import com.fatec.scireclass.model.Usuario;
+import java.util.List;
+
 
 @Repository
 public interface UsuarioRepository extends MongoRepository<Usuario, String> {
@@ -20,4 +23,6 @@ public interface UsuarioRepository extends MongoRepository<Usuario, String> {
     Usuario findUsuarioById(String id);
 
     Usuario findUsuarioByEmail(String email);
+
+    UserDetails getByEmail(String email);
 }

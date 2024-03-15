@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.TokenVerificacao;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.TokenDTO;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.mapper.UsuarioMapper;
 import com.fatec.scireclass.service.TokenSenhaResetService;
@@ -32,8 +36,8 @@ import com.fatec.scireclass.service.exceptions.TokenInvalidoException;
 import com.fatec.scireclass.service.exceptions.TokenNotFoundException;
 import com.fatec.scireclass.service.exceptions.UsuarioDesativadoException;
 import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
-
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -48,6 +52,10 @@ public class UsuarioController {
     private TokenVerificacaoService tokenVerificacaoService;
     @Autowired
     private TokenSenhaResetService tokenSenhaResetService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private com.fatec.scireclass.service.TokenService tokenService;
 
     @PostMapping("/save")
     public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO, HttpServletRequest request) {
@@ -126,15 +134,22 @@ public class UsuarioController {
         return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(this.usuarioService.alteraDados(usuarioDTO, usuarioId)), HttpStatus.OK);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<UsuarioDTO> login(@RequestParam String email, @RequestParam String senha) {
-        Usuario usuario = this.usuarioService.login(email, senha);
+    @PostMapping("/login")
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(), usuarioDTO.getSenha());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+        Usuario usuario = this.usuarioService.login(usuarioDTO.getEmail(), usuarioDTO.getSenha());
         if(usuario == null) 
-            throw new UsuarioNotFoundException("O usuário com email: " + email + " não foi encontrado");
+            throw new UsuarioNotFoundException("O usuário com email: " + usuarioDTO.getEmail() + " não foi encontrado");
         if(Boolean.FALSE.equals(usuario.getAtivo()))
-            throw new UsuarioDesativadoException("O usuário com email:" + email + " está desativado");
+            throw new UsuarioDesativadoException("O usuário com email:" + usuarioDTO.getEmail() + " está desativado");
         
-        return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(usuario), HttpStatus.OK);
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+        
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setToken(token);
+        return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
     }
 
     @GetMapping("/cursoFavoritado/{usuarioId}/{cursoId}")

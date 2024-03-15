@@ -1,16 +1,21 @@
 package com.fatec.scireclass.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fatec.scireclass.model.enums.Perfil;
 
 @Document
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     private String id;
@@ -24,7 +29,7 @@ public class Usuario {
     private String cnpj;
     private String cpf;
     private String telefone;
-    private Integer perfil;
+    private Perfil perfil;
     private Boolean ativo;
     @DBRef
     private List<Chat> chat;
@@ -118,12 +123,10 @@ public class Usuario {
         this.endereco = endereco;
     }
     public Perfil getPerfil() {
-        return Perfil.valueOf(perfil);
+        return perfil;
     }
     public void setPerfil(Perfil perfil) {
-        if (perfil != null) {
-            this.perfil = perfil.getCode();
-        }
+        this.perfil = perfil;
     }
     public Boolean getAtivo() {
         return ativo;
@@ -155,6 +158,22 @@ public class Usuario {
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
     }
-    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.perfil == Perfil.ADMINISTRADOR) return List.of(new SimpleGrantedAuthority("ADMINISTRADOR"),new SimpleGrantedAuthority("ALUNO"),new SimpleGrantedAuthority("INSTITUICAO"),new SimpleGrantedAuthority("PROFESSOR"));
+        if(this.perfil == Perfil.ALUNO) return List.of(new  SimpleGrantedAuthority("ALUNO"));
+        if(this.perfil == Perfil.PROFESSOR) return List.of(new  SimpleGrantedAuthority("PROFESSOR"));
+        if(this.perfil == Perfil.INSTITUICAO) return List.of(new  SimpleGrantedAuthority("INSTITUICAO"));
+        
+        return Collections.emptyList();
+    }
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+    @Override
+    public String getUsername() {
+        return email;
+    }
     
 }
