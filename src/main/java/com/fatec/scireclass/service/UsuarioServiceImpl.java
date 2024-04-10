@@ -51,9 +51,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     @Override
     public Usuario login(String email, String senha){
-        Usuario usuarioLogin = usuarioRepository.findUsuarioByEmailAndSenha(email,senha);
-        if(usuarioLogin != null)
-                return usuarioLogin;
+        BCryptPasswordEncoder enconde = new BCryptPasswordEncoder();
+        Usuario usuarioLogin = usuarioRepository.findUsuarioByEmail(email);
+        if(usuarioLogin == null)
+                return null;
+        if(enconde.matches(senha, usuarioLogin.getSenha()))
+            return usuarioLogin;
         return null;
     }
     @Override
@@ -119,7 +122,7 @@ public class UsuarioServiceImpl implements UsuarioService{
             usuario.setDataNascimento(usuarioDTO.getDataNascimento());
         }
         if(usuarioDTO.getSenha() != null){
-            usuario.setSenha(usuarioDTO.getSenha());
+            usuario.setSenha(new BCryptPasswordEncoder().encode(usuarioDTO.getSenha()));
         }
         if(usuarioDTO.getAtivo() != null){
             usuario.setAtivo(usuarioDTO.getAtivo());

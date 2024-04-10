@@ -43,7 +43,7 @@ public class SecurityConfiguration {
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, "/usuario/login").permitAll()
+            .requestMatchers(HttpMethod.GET, "/usuario/login/{email}/{senha}").permitAll()
             .requestMatchers(HttpMethod.POST, "/usuario/save").permitAll()
             .requestMatchers(HttpMethod.PUT, "/usuario/confirmarCadastro").permitAll()
             .requestMatchers(HttpMethod.PUT, "/usuario/mudarSenha/{token}").permitAll()

@@ -134,13 +134,19 @@ public class UsuarioController {
         return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(this.usuarioService.alteraDados(usuarioDTO, usuarioId)), HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(usuarioDTO.getEmail(), usuarioDTO.getSenha());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+    @GetMapping("/login/{email}/{senha}")
+    public ResponseEntity<TokenDTO> login(@PathVariable String email, @PathVariable String senha) {
 
-        if(auth == null) 
+        Usuario usuario = usuarioService.login(email, senha);
+
+        if(usuario == null)
             throw new UsuarioNotFoundException("Não foi possivel realizar o login");
+        if(Boolean.FALSE.equals(usuario.getAtivo()))
+            throw new UsuarioDesativadoException("O usuário não está ativo");
+
+        var usernamePassword = new UsernamePasswordAuthenticationToken(email, senha);
+        
+        var auth = this.authenticationManager.authenticate(usernamePassword);
         
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
         
