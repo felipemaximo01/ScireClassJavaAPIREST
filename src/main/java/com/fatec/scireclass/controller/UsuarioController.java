@@ -36,7 +36,6 @@ import com.fatec.scireclass.service.exceptions.TokenNotFoundException;
 import com.fatec.scireclass.service.exceptions.UsuarioDesativadoException;
 import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*")

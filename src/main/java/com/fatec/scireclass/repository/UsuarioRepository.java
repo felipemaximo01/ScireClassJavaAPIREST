@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import com.fatec.scireclass.model.Usuario;
-import java.util.List;
 
 
 @Repository
