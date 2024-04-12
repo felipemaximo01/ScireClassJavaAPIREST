@@ -23,9 +23,12 @@ import org.springframework.web.context.request.WebRequest;
 import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.TokenVerificacao;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.CadastroDTO;
+import com.fatec.scireclass.model.dto.EnderecoDTO;
 import com.fatec.scireclass.model.dto.TokenDTO;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.mapper.UsuarioMapper;
+import com.fatec.scireclass.service.EnderecoService;
 import com.fatec.scireclass.service.TokenSenhaResetService;
 import com.fatec.scireclass.service.TokenVerificacaoService;
 import com.fatec.scireclass.service.UsuarioService;
@@ -57,9 +60,9 @@ public class UsuarioController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO, HttpServletRequest request) {
+    public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody CadastroDTO cadastroDTO, HttpServletRequest request) {
 
-        Usuario usuario = usuarioService.cadastrar(usuarioDTO);
+        Usuario usuario = usuarioService.cadastrar(cadastroDTO.getUsuarioDTO(),cadastroDTO.getEnderecoDTO());
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new CadastroEvent(usuario,request.getLocale(), appUrl));
         return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(usuario), HttpStatus.OK);

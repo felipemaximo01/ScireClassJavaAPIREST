@@ -4,11 +4,12 @@ import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.EnderecoDTO;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
 
 @Service
 public interface UsuarioService {
-    Usuario cadastrar(UsuarioDTO usuario);
+    Usuario cadastrar(UsuarioDTO usuario, EnderecoDTO enderecoDTO);
 
     Boolean encontrarEmail(String email);
 

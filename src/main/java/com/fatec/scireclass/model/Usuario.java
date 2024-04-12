@@ -31,6 +31,7 @@ public class Usuario implements UserDetails {
     private String telefone;
     private Perfil perfil;
     private Boolean ativo;
+    private Boolean aceitouTermos;
     @DBRef
     private List<Chat> chat;
     @DBRef
@@ -158,6 +159,13 @@ public class Usuario implements UserDetails {
     public void setComentarios(List<Comentario> comentarios) {
         this.comentarios = comentarios;
     }
+    public Boolean getAceitouTermos() {
+        return aceitouTermos;
+    }
+    public void setAceitouTermos(Boolean aceitouTermos) {
+        this.aceitouTermos = aceitouTermos;
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.perfil == Perfil.ADMINISTRADOR) return List.of(new SimpleGrantedAuthority("ADMINISTRADOR"),new SimpleGrantedAuthority("ALUNO"),new SimpleGrantedAuthority("INSTITUICAO"),new SimpleGrantedAuthority("PROFESSOR"));
@@ -175,5 +183,8 @@ public class Usuario implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+
+
     
 }

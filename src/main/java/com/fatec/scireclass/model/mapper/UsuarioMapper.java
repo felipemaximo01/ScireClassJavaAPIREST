@@ -31,6 +31,8 @@ public class UsuarioMapper {
             usuario.setTelefone(usuarioDTO.getTelefone());
         if(usuarioDTO.getPerfil() != null)
             usuario.setPerfil(usuarioDTO.getPerfil());
+        if(usuarioDTO.getAceitouTermos() != null)
+            usuario.setAceitouTermos(usuarioDTO.getAceitouTermos());
 
         return usuario;
     }
@@ -59,6 +61,8 @@ public class UsuarioMapper {
             usuarioDTO.setTelefone(usuario.getTelefone());
         if(usuario.getPerfil() != null)
             usuarioDTO.setPerfil(usuario.getPerfil());
+        if(usuario.getAceitouTermos() != null)
+            usuarioDTO.setAceitouTermos(usuario.getAceitouTermos());
 
         return usuarioDTO;
     }

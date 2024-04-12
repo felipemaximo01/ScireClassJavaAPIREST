@@ -3,6 +3,7 @@ package com.fatec.scireclass.model;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -11,6 +12,7 @@ public class Categoria {
     private String id;
     private String nome;
     private String descricao;
+    @DBRef
     private List<Curso> cursos;
     public String getId() {
         return id;

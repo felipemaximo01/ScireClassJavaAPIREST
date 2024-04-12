@@ -1,6 +1,7 @@
 package com.fatec.scireclass.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
@@ -8,13 +9,16 @@ public class Endereco {
     @Id
     private String id;
 
+    private String numero;
     private String cep;
     private String logradouro;
     private String complemento;
     private String bairro;
     private String localidade;
     private String uf;
+    @DBRef
     private Usuario usuario;
+    @DBRef
     private Curso curso;
 
     public String getId() {
@@ -71,6 +75,13 @@ public class Endereco {
     public void setCurso(Curso curso) {
         this.curso = curso;
     }
+    public String getNumero() {
+        return numero;
+    }
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+    
     
     
 }

@@ -23,6 +23,8 @@ public class EnderecoMapper {
             endereco.setLocalidade(enderecoDTO.getLocalidade());
         if(enderecoDTO.getUf() != null)
             endereco.setUf(enderecoDTO.getUf());
+        if(enderecoDTO.getNumero() != null)
+            endereco.setNumero(enderecoDTO.getNumero());
 
         return endereco;
     }
@@ -43,6 +45,8 @@ public class EnderecoMapper {
             enderecoDTO.setLocalidade(endereco.getLocalidade());
         if(endereco.getUf() != null)
             enderecoDTO.setUf(endereco.getUf());
+        if(endereco.getNumero() != null)
+            enderecoDTO.setNumero(endereco.getNumero());
 
         return enderecoDTO;
     }

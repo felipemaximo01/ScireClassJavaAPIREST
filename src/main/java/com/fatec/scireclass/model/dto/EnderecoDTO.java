@@ -3,6 +3,7 @@ package com.fatec.scireclass.model.dto;
 public class EnderecoDTO {
     private String id;
 
+    private String numero;
     private String cep;
     private String logradouro;
     private String complemento;
@@ -52,5 +53,13 @@ public class EnderecoDTO {
     public void setUf(String uf) {
         this.uf = uf;
     }
+    public String getNumero() {
+        return numero;
+    }
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+    
+
     
 }

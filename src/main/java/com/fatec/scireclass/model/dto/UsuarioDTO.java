@@ -19,6 +19,7 @@ public class UsuarioDTO {
     private String telefone;
     private Perfil perfil;
     private Boolean ativo;
+    private Boolean aceitouTermos;
 
     public String getId() {
         return id;
@@ -99,5 +100,13 @@ public class UsuarioDTO {
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
+    public Boolean getAceitouTermos() {
+        return aceitouTermos;
+    }
+    public void setAceitouTermos(Boolean aceitouTermos) {
+        this.aceitouTermos = aceitouTermos;
+    }
+    
+
     
 }

@@ -10,12 +10,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Curso;
+import com.fatec.scireclass.model.Endereco;
 import com.fatec.scireclass.model.TokenSenhaReset;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.EnderecoDTO;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.enums.Perfil;
+import com.fatec.scireclass.model.mapper.EnderecoMapper;
 import com.fatec.scireclass.model.mapper.UsuarioMapper;
 import com.fatec.scireclass.repository.CursoRepository;
+import com.fatec.scireclass.repository.EnderecoRepository;
 import com.fatec.scireclass.repository.TokenSenhaResetRepository;
 import com.fatec.scireclass.repository.UsuarioRepository;
 import com.fatec.scireclass.service.exceptions.EmailInvalidoException;
@@ -29,17 +33,25 @@ public class UsuarioServiceImpl implements UsuarioService{
     private CursoRepository cursoRepository;
     @Autowired
     private TokenSenhaResetRepository tokenSenhaResetRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
     @Override
-    public Usuario cadastrar(UsuarioDTO usuarioDTO) {
+    public Usuario cadastrar(UsuarioDTO usuarioDTO,EnderecoDTO enderecoDTO) {
         if(Boolean.FALSE.equals(encontrarEmail(usuarioDTO.getEmail()))) {
             if (validaEmail(usuarioDTO)){
                 Usuario usuario = UsuarioMapper.usuarioDTOToUsuario(usuarioDTO);
+                Endereco endereco = EnderecoMapper.enderecoDTOToEndereco(enderecoDTO);
                 usuario.setAtivo(false);
                 String encryptedPassword = new BCryptPasswordEncoder().encode(usuario.getSenha());
                 usuario.setSenha(encryptedPassword);
+                endereco = enderecoRepository.save(endereco);
+                usuario = this.usuarioRepository.save(usuario);
+                usuario.setEndereco(endereco);
+                endereco.setUsuario(usuario);
+                enderecoRepository.save(endereco);
                 return this.usuarioRepository.save(usuario);
             }else {
                 throw new EmailInvalidoException("O email: " + usuarioDTO.getEmail() + " não é um email válido");
