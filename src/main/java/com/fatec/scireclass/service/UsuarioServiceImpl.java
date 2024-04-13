@@ -200,7 +200,7 @@ public class UsuarioServiceImpl implements UsuarioService{
         Usuario usuario = usuarioRepository.findUsuarioById(tokenSenhaReset.getUsuario().getId());
         if(usuario == null)
             throw new UsuarioNotFoundException("O usuário não foi encontrado");
-        usuario.setSenha(senha);
+        usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
         tokenSenhaResetRepository.deleteTokenSenhaByUsuarioEmail(usuario.getEmail());
         return usuarioRepository.save(usuario);
     }
