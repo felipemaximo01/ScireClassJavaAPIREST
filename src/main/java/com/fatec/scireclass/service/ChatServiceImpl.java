@@ -1,6 +1,7 @@
 package com.fatec.scireclass.service;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,10 +9,12 @@ import org.springframework.stereotype.Service;
 import com.fatec.scireclass.model.Chat;
 import com.fatec.scireclass.model.Mensagem;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.enums.Perfil;
 import com.fatec.scireclass.repository.ChatRepository;
 import com.fatec.scireclass.repository.MensagemRepository;
 import com.fatec.scireclass.repository.UsuarioRepository;
 import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
+import com.fatec.scireclass.service.exceptions.UsuarioUnauthorizedException;
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -47,28 +50,37 @@ public class ChatServiceImpl implements ChatService{
         Usuario aluno = usuarioRepository.findById(alunoID).get();
         if(aluno == null)
             throw new UsuarioNotFoundException("O usuário com ID: " + alunoID + " não foi encontrado");
+        if(aluno.getPerfil() != Perfil.ALUNO)
+            throw new UsuarioUnauthorizedException("O usuário enviado não é um aluno");
         Usuario professor = usuarioRepository.findById(professorID).get();
         if(professor == null)
             throw new UsuarioNotFoundException("O usuário com ID: " + professorID + " não foi encontrado");
+        if(professor.getPerfil() != Perfil.PROFESSOR)
+            throw new UsuarioUnauthorizedException("O usuário enviado não é um professor");
+
+        List<Chat> chats = chatRepository.findByAlunoAndProfessor(aluno, professor);
 
         Chat chat = new Chat();
 
-        chat.setAluno(aluno);
-        chat.setProfessor(professor);
-        
-        chat = chatRepository.save(chat);
-
+        if(chats != null && chats.size() > 0){
+             chat = chatRepository.findById(chats.get(0).getId()).get();
+        }else{
+            chat.setAluno(aluno);
+            chat.setProfessor(professor);
+            
+            chat = chatRepository.save(chat);
+        }
         Mensagem mensagemHello = new Mensagem();
-
+    
         mensagemHello.setChat(chat);
         mensagemHello.setUsuario(aluno);
         mensagemHello.setMensagens(MENSAGEMHELLO);
         mensagemHello.setInstante(Instant.now());
-
+    
         mensagemHello = mensagemRepository.save(mensagemHello);
-
+    
         chat.getMensagens().add(mensagemHello);
-
+    
         return chatRepository.save(chat);
     }
     

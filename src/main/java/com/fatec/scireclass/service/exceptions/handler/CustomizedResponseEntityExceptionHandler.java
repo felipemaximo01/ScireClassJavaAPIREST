@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.fatec.scireclass.service.exceptions.ChatNotFoundException;
 import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
 import com.fatec.scireclass.service.exceptions.CursoNotVagasException;
 import com.fatec.scireclass.service.exceptions.EmailInvalidoException;
@@ -20,6 +21,7 @@ import com.fatec.scireclass.service.exceptions.TokenInvalidoException;
 import com.fatec.scireclass.service.exceptions.TokenNotFoundException;
 import com.fatec.scireclass.service.exceptions.UsuarioDesativadoException;
 import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
+import com.fatec.scireclass.service.exceptions.UsuarioUnauthorizedException;
 
 @ControllerAdvice
 @RestController
@@ -32,7 +34,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({MatriculaNotFoundException.class, CursoNotFoundException.class,UsuarioNotFoundException.class,TokenNotFoundException.class})
+    @ExceptionHandler({MatriculaNotFoundException.class, CursoNotFoundException.class,UsuarioNotFoundException.class,TokenNotFoundException.class,ChatNotFoundException.class})
     public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
@@ -40,6 +42,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @ExceptionHandler({MatriculaNaoFinalizadaException.class, CursoNotVagasException.class, EmailInvalidoException.class, TokenInvalidoException.class, UsuarioDesativadoException.class})
     public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({UsuarioUnauthorizedException.class})
+    public final ResponseEntity<ExceptionResponse> handleUnauthorizedExceptions(Exception ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
