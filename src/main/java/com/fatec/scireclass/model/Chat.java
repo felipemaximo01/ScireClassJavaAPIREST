@@ -12,7 +12,9 @@ public class Chat {
     private String id;
     
     @DBRef
-    private List<Usuario> usuarios;
+    private Usuario aluno;
+    @DBRef
+    private Usuario professor;
     @DBRef
     private List<Mensagem> mensagens;
 
@@ -22,18 +24,24 @@ public class Chat {
     public void setId(String id) {
         this.id = id;
     }
-    public List<Usuario> getUsuarios() {
-        return usuarios;
-    }
-    public void setUsuarios(List<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
     public List<Mensagem> getMensagens() {
         return mensagens;
     }
     public void setMensagens(List<Mensagem> mensagens) {
         this.mensagens = mensagens;
     }
-
+    public Usuario getAluno() {
+        return aluno;
+    }
+    public void setAluno(Usuario aluno) {
+        this.aluno = aluno;
+    }
+    public Usuario getProfessor() {
+        return professor;
+    }
+    public void setProfessor(Usuario professor) {
+        this.professor = professor;
+    }
+    
     
 }
