@@ -31,7 +31,7 @@ public class CursoServiceImpl implements CursoService {
         
         Curso curso = CursoMapper.cursoDTOToCurso(cursoDTO);
         curso = cursoRepository.save(curso);
-        imagemService.addImage(curso.getNome() + "Imagem", curso, file);
+        imagemService.addImage(curso.getNome() + " Imagem", curso.getId(), file);
         return CursoMapper.cursoToCursoDTO(curso);
     }
 
