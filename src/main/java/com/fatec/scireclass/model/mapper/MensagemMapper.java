@@ -29,6 +29,8 @@ public class MensagemMapper {
             mensagemDTO.setInstante(mensagem.getInstante());
         if(mensagem.getMensagens() != null)
             mensagemDTO.setMensagens(mensagem.getMensagens());
+        if(mensagem.getUsuario() !=  null && mensagem.getUsuario().getNome() != null)
+            mensagemDTO.setNome(mensagem.getUsuario().getNome());
 
         return mensagemDTO;
     }

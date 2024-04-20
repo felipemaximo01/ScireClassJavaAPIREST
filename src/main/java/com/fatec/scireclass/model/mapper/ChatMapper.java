@@ -13,6 +13,10 @@ public class ChatMapper {
         Chat chat = new Chat();
         if(chatDTO.getId() != null)
             chat.setId(chatDTO.getId());
+        if(chatDTO.getAluno() != null)
+            chat.setAluno(UsuarioMapper.usuarioDTOToUsuario(chatDTO.getAluno()));
+        if(chatDTO.getProfessor() != null)
+            chat.setProfessor(UsuarioMapper.usuarioDTOToUsuario(chatDTO.getProfessor()));
 
         return chat;
     }
@@ -21,6 +25,10 @@ public class ChatMapper {
         ChatDTO chatDTO = new ChatDTO();
         if(chat.getId() != null)
             chatDTO.setId(chat.getId());
+        if(chat.getAluno() != null)
+            chatDTO.setAluno(UsuarioMapper.usuarioToUsuarioDTO(chat.getAluno()));
+        if(chat.getProfessor() != null)
+            chatDTO.setProfessor(UsuarioMapper.usuarioToUsuarioDTO(chat.getProfessor()));
 
         return chatDTO;
     }

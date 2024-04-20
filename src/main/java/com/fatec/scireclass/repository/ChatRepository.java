@@ -13,5 +13,7 @@ import java.util.List;
 public interface ChatRepository extends  MongoRepository<Chat,String> {
 
     List<Chat> findByAlunoAndProfessor(Usuario aluno, Usuario professor);
+
+    List<Chat> findByAlunoOrProfessor(Usuario usuario);
     
 }

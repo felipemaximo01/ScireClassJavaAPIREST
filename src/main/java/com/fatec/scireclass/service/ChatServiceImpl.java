@@ -1,6 +1,7 @@
 package com.fatec.scireclass.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.fatec.scireclass.model.Chat;
 import com.fatec.scireclass.model.Mensagem;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.ChatDTO;
 import com.fatec.scireclass.model.enums.Perfil;
+import com.fatec.scireclass.model.mapper.ChatMapper;
 import com.fatec.scireclass.repository.ChatRepository;
 import com.fatec.scireclass.repository.MensagemRepository;
 import com.fatec.scireclass.repository.UsuarioRepository;
@@ -82,6 +85,19 @@ public class ChatServiceImpl implements ChatService{
         chat.getMensagens().add(mensagemHello);
     
         return chatRepository.save(chat);
+    }
+
+    @Override
+    public List<ChatDTO> getChats(String usuarioID) {
+        Usuario usuario = usuarioRepository.findById(usuarioID).get();
+        if(usuario == null)
+            throw new UsuarioNotFoundException("O usuário com ID: " +usuarioID+" não foi encontrado");
+        List<Chat> chats = chatRepository.findByAlunoOrProfessor(usuario);
+        List<ChatDTO> chatsDTO = new ArrayList<>();
+        for (Chat chat : chats) {
+            chatsDTO.add(ChatMapper.ChatToChatDTO(chat));
+        }
+        return chatsDTO;
     }
     
 }

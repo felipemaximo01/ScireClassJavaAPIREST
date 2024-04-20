@@ -6,6 +6,8 @@ public class MensagemDTO {
     private String id;
     private String mensagens;
     private Instant instante;
+    private String nome;
+
     public String getId() {
         return id;
     }
@@ -24,6 +26,13 @@ public class MensagemDTO {
     public void setInstante(Instant instante) {
         this.instante = instante;
     }
+    public String getNome() {
+        return nome;
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    
 
     
 }

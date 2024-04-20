@@ -1,6 +1,8 @@
 package com.fatec.scireclass.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import com.fatec.scireclass.model.Chat;
 import com.fatec.scireclass.model.Mensagem;
 import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.model.dto.MensagemDTO;
+import com.fatec.scireclass.model.mapper.MensagemMapper;
 import com.fatec.scireclass.repository.ChatRepository;
 import com.fatec.scireclass.repository.MensagemRepository;
 import com.fatec.scireclass.repository.UsuarioRepository;
@@ -68,6 +71,19 @@ public class MensagemServiceImpl implements MensagemService {
         chatRepository.save(chat);
 
         return mensagem;
+    }
+
+    @Override
+    public List<MensagemDTO> getMensagens(String chatID) {
+        Chat chat = chatRepository.findById(chatID).get();
+        if(chat == null)
+            throw new ChatNotFoundException("O chat com ID: " + chatID+ " não foi encontrado");
+        List<Mensagem> mensagens = mensagemRepository.findByChat(chat);
+        List<MensagemDTO> mensagensDTO = new ArrayList<>();
+        for (Mensagem mensagem : mensagens) {
+            mensagensDTO.add(MensagemMapper.mensagemToMensagemDTO(mensagem));
+        }
+        return mensagensDTO;
     }
     
 }

@@ -1,5 +1,7 @@
 package com.fatec.scireclass.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Mensagem;
@@ -15,5 +17,7 @@ public interface MensagemService {
     void deleteMensagem(String id);
 
     Mensagem sendMensagem(MensagemDTO mensagemDTO, String chatID, String usuarioID);
+
+    List<MensagemDTO> getMensagens(String chatID);
     
 } 
