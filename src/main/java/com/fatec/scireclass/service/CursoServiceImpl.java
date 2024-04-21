@@ -11,11 +11,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fatec.scireclass.model.Categoria;
 import com.fatec.scireclass.model.Curso;
+import com.fatec.scireclass.model.Endereco;
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.CadastroCursoDTO;
 import com.fatec.scireclass.model.dto.CursoDTO;
 import com.fatec.scireclass.model.mapper.CursoMapper;
+import com.fatec.scireclass.model.mapper.EnderecoMapper;
 import com.fatec.scireclass.repository.CursoRepository;
+import com.fatec.scireclass.repository.EnderecoRepository;
+import com.fatec.scireclass.repository.UsuarioRepository;
+import com.fatec.scireclass.service.exceptions.CategoriaNotFoundException;
 import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
+import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 
 @Service
 public class CursoServiceImpl implements CursoService {
@@ -25,12 +32,28 @@ public class CursoServiceImpl implements CursoService {
     private ImagemService imagemService;
     @Autowired
     private CategoriaService categoriaService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     @Override
-    public CursoDTO cadastrarCurso(CursoDTO cursoDTO, MultipartFile file) throws GeneralSecurityException, IOException {
-        
-        Curso curso = CursoMapper.cursoDTOToCurso(cursoDTO);
+    public CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO, String criadorId ,MultipartFile file) throws GeneralSecurityException, IOException {
+        Usuario usuario = usuarioRepository.findById(criadorId).get();
+        if(usuario == null)
+            throw new UsuarioNotFoundException("não foi encontrado o usuário com ID: " + criadorId);
+        Categoria categoria = categoriaService.categoriaPorId(cadastroCursoDTO.getCategoriaDTO().getId());
+        if(categoria == null)
+            throw new CategoriaNotFoundException("não foi encontrada a categoria com ID: " + cadastroCursoDTO.getCategoriaDTO().getId());
+        Curso curso = CursoMapper.cursoDTOToCurso(cadastroCursoDTO.getCursoDTO());
+        curso.setCriador(usuario);
+        curso.setCategoria(categoria);
         curso = cursoRepository.save(curso);
+        Endereco endereco = enderecoRepository.save(EnderecoMapper.enderecoDTOToEndereco(cadastroCursoDTO.getEnderecoDTO()));
+        curso.setEndereco(endereco);
+        endereco.setCurso(curso);
+        enderecoRepository.save(endereco);
+        curso = cursoRepository.save(curso);        
         imagemService.addImage(curso.getNome() + " Imagem", curso.getId(), file);
         return CursoMapper.cursoToCursoDTO(curso);
     }

@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.CadastroCursoDTO;
 import com.fatec.scireclass.model.dto.CursoDTO;
 
 @Service
 public interface CursoService {
-    CursoDTO cadastrarCurso(CursoDTO cursoDTO, MultipartFile file) throws GeneralSecurityException, IOException;
+    CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO,String criadorId ,MultipartFile file) throws GeneralSecurityException, IOException;
 
     List<CursoDTO> encontrarDesc(String desc);
 

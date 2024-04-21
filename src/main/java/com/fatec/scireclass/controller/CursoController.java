@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fatec.scireclass.model.Usuario;
+import com.fatec.scireclass.model.dto.CadastroCursoDTO;
 import com.fatec.scireclass.model.dto.CursoDTO;
 import com.fatec.scireclass.service.CursoService;
 import com.fatec.scireclass.service.UsuarioService;
@@ -38,10 +39,10 @@ public class CursoController {
 
     private static final String NOTFOUNDUSUARIO = "Não foi encontrado o usuário com o ID: ";
 
-    @PostMapping("/save")
-    public ResponseEntity<CursoDTO> salvarCurso(@RequestPart("curso") CursoDTO cursoDTO, @RequestPart("file") MultipartFile file) throws GeneralSecurityException, IOException {
+    @PostMapping("/save/{criadorId}")
+    public ResponseEntity<CursoDTO> salvarCurso(@RequestPart("cadastroCurso") CadastroCursoDTO cadastroCursoDTO,@PathVariable String criadorId ,@RequestPart("file") MultipartFile file) throws GeneralSecurityException, IOException {
         
-        CursoDTO cursoResponse = cursoService.cadastrarCurso(cursoDTO,file);
+        CursoDTO cursoResponse = cursoService.cadastrarCurso(cadastroCursoDTO,criadorId,file);
 
         return new ResponseEntity<>(cursoResponse, HttpStatus.OK);
     }
