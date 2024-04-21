@@ -10,18 +10,22 @@ public class CategoriaMapper {
 
     public static Categoria categoriaDTOToCategoria(CategoriaDTO categoriaDTO){
         Categoria categoria = new Categoria();
-
-        categoria.setNome(categoriaDTO.getNome());
-        categoria.setDescricao(categoriaDTO.getDescricao());
+        if(categoriaDTO.getNome() != null)
+            categoria.setNome(categoriaDTO.getNome());
+        if(categoriaDTO.getDescricao() != null)
+            categoria.setDescricao(categoriaDTO.getDescricao());
 
         return categoria;
     }
 
     public static CategoriaDTO categoriaToCategoriaDTO(Categoria categoria){
         CategoriaDTO categoriaDTO = new CategoriaDTO();
-        categoriaDTO.setId(categoria.getId());
-        categoriaDTO.setNome(categoria.getNome());
-        categoriaDTO.setDescricao(categoria.getDescricao());
+        if(categoria.getId() != null)
+            categoriaDTO.setId(categoria.getId());
+        if(categoria.getNome() != null)
+            categoriaDTO.setNome(categoria.getNome());
+        if(categoria.getDescricao() != null)
+            categoriaDTO.setDescricao(categoria.getDescricao());
 
         return categoriaDTO;
     }

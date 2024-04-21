@@ -11,31 +11,54 @@ public class CursoMapper {
     
     public static Curso cursoDTOToCurso(CursoDTO cursoDTO){
         Curso curso = new Curso();
-
-        curso.setNome(cursoDTO.getNome());
-        curso.setDescricao(cursoDTO.getDescricao());
-        curso.setLink(cursoDTO.getLink());
-        curso.setDuracao(cursoDTO.getDuracao());
-        curso.setTelefone(cursoDTO.getTelefone());
-        curso.setEmail(cursoDTO.getEmail());
-        curso.setValor(cursoDTO.getValor());
-        curso.setVagas(cursoDTO.getVagas());
-
+        if(cursoDTO.getNome() != null)
+            curso.setNome(cursoDTO.getNome());
+        if(cursoDTO.getDescricao() != null)
+            curso.setDescricao(cursoDTO.getDescricao());
+        if(cursoDTO.getLink() != null)
+            curso.setLink(cursoDTO.getLink());
+        if(cursoDTO.getDuracao() != null)
+            curso.setDuracao(cursoDTO.getDuracao());
+        if(cursoDTO.getTelefone() != null)
+            curso.setTelefone(cursoDTO.getTelefone());
+        if(cursoDTO.getEmail() != null)
+            curso.setEmail(cursoDTO.getEmail());
+        if(cursoDTO.getValor() != null)
+            curso.setValor(cursoDTO.getValor());
+        if(cursoDTO.getVagas() != null)
+            curso.setVagas(cursoDTO.getVagas());
+        if(cursoDTO.getModalidade() != null)
+            curso.setModalidade(cursoDTO.getModalidade());
+        if(cursoDTO.getAceitouTermos() != null)
+            curso.setAceitouTermos(cursoDTO.getAceitouTermos());
+        
         return curso;
     }
 
     public static CursoDTO cursoToCursoDTO(Curso curso){
         CursoDTO cursoDTO = new CursoDTO();
-
-        cursoDTO.setId(curso.getId());
-        cursoDTO.setNome(curso.getNome());
-        cursoDTO.setDescricao(curso.getDescricao());
-        cursoDTO.setLink(curso.getLink());
-        cursoDTO.setDuracao(curso.getDuracao());
-        cursoDTO.setTelefone(curso.getTelefone());
-        cursoDTO.setEmail(curso.getEmail());
-        cursoDTO.setValor(curso.getValor());
-        cursoDTO.setVagas(curso.getVagas());
+        if(curso.getId() != null)
+            cursoDTO.setId(curso.getId());
+        if(curso.getNome() != null)
+            cursoDTO.setNome(curso.getNome());
+        if(curso.getDescricao() != null)
+            cursoDTO.setDescricao(curso.getDescricao());
+        if(curso.getLink() != null)
+            cursoDTO.setLink(curso.getLink());
+        if(curso.getDuracao() != null)
+            cursoDTO.setDuracao(curso.getDuracao());
+        if(curso.getTelefone() != null)
+            cursoDTO.setTelefone(curso.getTelefone());
+        if(curso.getEmail() != null)
+            cursoDTO.setEmail(curso.getEmail());
+        if(curso.getValor() != null)
+            cursoDTO.setValor(curso.getValor());
+        if(curso.getVagas() != null)
+            cursoDTO.setVagas(curso.getVagas());
+        if(curso.getModalidade() != null)
+            cursoDTO.setModalidade(curso.getModalidade());
+        if(curso.getAceitouTermos() != null)
+            cursoDTO.setAceitouTermos(curso.getAceitouTermos());
 
         return cursoDTO;
     }

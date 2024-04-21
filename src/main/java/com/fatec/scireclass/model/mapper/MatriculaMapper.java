@@ -11,11 +11,14 @@ public class MatriculaMapper {
 
     public static Matricula matriculaDTOToMatricula(MatriculaDTO matriculaDTO){
         Matricula matricula = new Matricula();
-
-        matricula.setNumeroMatricula(matriculaDTO.getNumeroMatricula());
-        matricula.setAtivo(matriculaDTO.getAtivo());
-        matricula.setDataFim(matriculaDTO.getDataFim());
-        matricula.setDataInicio(matriculaDTO.getDataInicio());
+        if(matriculaDTO.getNumeroMatricula() != null)
+            matricula.setNumeroMatricula(matriculaDTO.getNumeroMatricula());
+        if(matriculaDTO.getAtivo() != null)
+            matricula.setAtivo(matriculaDTO.getAtivo());
+        if(matriculaDTO.getDataFim() != null)
+            matricula.setDataFim(matriculaDTO.getDataFim());
+        if(matriculaDTO.getDataInicio() != null)
+            matricula.setDataInicio(matriculaDTO.getDataInicio());
 
         return matricula;
     }
@@ -23,13 +26,16 @@ public class MatriculaMapper {
     
     public static MatriculaDTO matriculaToMatriculaDTO(Matricula matricula){
         MatriculaDTO matriculaDTO = new MatriculaDTO();
-
-        matriculaDTO.setId(matricula.getId());
-        matriculaDTO.setNumeroMatricula(matricula.getNumeroMatricula());
-        matriculaDTO.setAtivo(matricula.getAtivo());
+        if(matricula.getId() != null)
+            matriculaDTO.setId(matricula.getId());
+        if(matricula.getNumeroMatricula() != null)
+            matriculaDTO.setNumeroMatricula(matricula.getNumeroMatricula());
+        if(matricula.getAtivo() != null)
+            matriculaDTO.setAtivo(matricula.getAtivo());
         if(matricula.getDataFim() != null)
             matriculaDTO.setDataFim(matricula.getDataFim());
-        matriculaDTO.setDataInicio(matricula.getDataInicio());
+        if(matricula.getDataInicio() != null)
+            matriculaDTO.setDataInicio(matricula.getDataInicio());
 
         return matriculaDTO;
     }

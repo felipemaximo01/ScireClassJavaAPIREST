@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fatec.scireclass.model.enums.Modalidade;
+
 @Document
 public class Curso {
     
@@ -21,6 +23,8 @@ public class Curso {
     private Double avaliacao;
     private Integer vagas;
     private Boolean ativo;
+    private Modalidade modalidade;
+    private Boolean aceitouTermos;
     @DBRef
     private Usuario criador;
     @DBRef
@@ -136,6 +140,18 @@ public class Curso {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
-
+    public Modalidade getModalidade() {
+        return modalidade;
+    }
+    public void setModalidade(Modalidade modalidade) {
+        this.modalidade = modalidade;
+    }
+    public Boolean getAceitouTermos() {
+        return aceitouTermos;
+    }
+    public void setAceitouTermos(Boolean aceitouTermos) {
+        this.aceitouTermos = aceitouTermos;
+    }
+    
     
 }

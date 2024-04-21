@@ -1,5 +1,7 @@
 package com.fatec.scireclass.model.dto;
 
+import com.fatec.scireclass.model.enums.Modalidade;
+
 public class CursoDTO {
     private String id;
     private String nome;
@@ -12,6 +14,8 @@ public class CursoDTO {
     private Double avaliacao;
     private Integer vagas;
     private Boolean ativo;
+    private Modalidade modalidade;
+    private Boolean aceitouTermos;
 
     public String getId() {
         return id;
@@ -78,6 +82,18 @@ public class CursoDTO {
     }
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+    public Modalidade getModalidade() {
+        return modalidade;
+    }
+    public void setModalidade(Modalidade modalidade) {
+        this.modalidade = modalidade;
+    }
+    public Boolean getAceitouTermos() {
+        return aceitouTermos;
+    }
+    public void setAceitouTermos(Boolean aceitouTermos) {
+        this.aceitouTermos = aceitouTermos;
     }
 
     

@@ -153,6 +153,7 @@ public class UsuarioController {
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setToken(token);
         tokenDTO.setId(usuario.getId());
+        tokenDTO.setPerfil(usuario.getPerfil());
         return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
     }
 
