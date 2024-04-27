@@ -13,7 +13,9 @@ import com.fatec.scireclass.repository.AulaRepository;
 import com.fatec.scireclass.repository.CursoRepository;
 import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AulaServiceImpl implements AulaService {
 
     @Autowired

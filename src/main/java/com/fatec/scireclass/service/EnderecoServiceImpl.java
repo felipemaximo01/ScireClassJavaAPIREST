@@ -6,7 +6,9 @@ import com.fatec.scireclass.model.Endereco;
 import com.fatec.scireclass.model.dto.EnderecoDTO;
 import com.fatec.scireclass.model.mapper.EnderecoMapper;
 import com.fatec.scireclass.repository.EnderecoRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EnderecoServiceImpl implements EnderecoService {
 
     @Autowired
