@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,15 +47,15 @@ public class CursoServiceImpl implements CursoService {
         if(categoria == null)
             throw new CategoriaNotFoundException("não foi encontrada a categoria com ID: " + cadastroCursoDTO.getCategoriaDTO().getId());
         Curso curso = CursoMapper.cursoDTOToCurso(cadastroCursoDTO.getCursoDTO());
+        Endereco endereco = enderecoRepository.save(EnderecoMapper.enderecoDTOToEndereco(cadastroCursoDTO.getEnderecoDTO()));
         curso.setCriador(usuario);
         curso.setCategoria(categoria);
         curso = cursoRepository.save(curso);
-        Endereco endereco = enderecoRepository.save(EnderecoMapper.enderecoDTOToEndereco(cadastroCursoDTO.getEnderecoDTO()));
         curso.setEndereco(endereco);
         endereco.setCurso(curso);
         enderecoRepository.save(endereco);
         curso = cursoRepository.save(curso);        
-        imagemService.addImage(curso.getNome() + " Imagem", curso.getId(), file);
+        imagemService.addImage(curso.getNome() + UUID.randomUUID().toString(), curso.getId(), file);
         return CursoMapper.cursoToCursoDTO(curso);
     }
 
