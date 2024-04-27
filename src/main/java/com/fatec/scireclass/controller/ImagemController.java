@@ -3,7 +3,11 @@ package com.fatec.scireclass.controller;
 import com.fatec.scireclass.model.dto.ImagemDTO;
 import com.fatec.scireclass.service.ImagemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,9 +33,12 @@ public class ImagemController {
         return new ResponseEntity<>(imagemService.getImagem(imagemId), HttpStatus.OK);
     }
 
-    @GetMapping("/downloadImage/{path}")
-    public ResponseEntity<byte[]> downlaod(@PathVariable String path) {
-        return new ResponseEntity<>(imagemService.getFile(path), HttpStatus.OK);
+    @GetMapping("/downloadImage")
+    public ResponseEntity<Resource> downlaod(@RequestParam String path) {
+        ByteArrayResource resource = new ByteArrayResource(imagemService.getFile(path));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + path + "\"");
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).headers(headers).body(resource);
     }
 
     @DeleteMapping("/{imagemId}/{path}")
