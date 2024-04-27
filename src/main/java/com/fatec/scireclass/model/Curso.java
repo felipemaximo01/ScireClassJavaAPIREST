@@ -1,5 +1,6 @@
 package com.fatec.scireclass.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -25,6 +26,7 @@ public class Curso {
     private Boolean ativo;
     private Modalidade modalidade;
     private Boolean aceitouTermos;
+    
     @DBRef
     private Usuario criador;
     @DBRef
@@ -37,6 +39,8 @@ public class Curso {
     private Imagem imagem;
     @DBRef
     private Categoria categoria;
+    @DBRef
+    private List<Aula> aulas = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -151,6 +155,12 @@ public class Curso {
     }
     public void setAceitouTermos(Boolean aceitouTermos) {
         this.aceitouTermos = aceitouTermos;
+    }
+    public List<Aula> getAulas() {
+        return aulas;
+    }
+    public void setAulas(List<Aula> aulas) {
+        this.aulas = aulas;
     }
     
     

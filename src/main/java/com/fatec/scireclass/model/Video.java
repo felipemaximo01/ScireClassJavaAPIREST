@@ -1,9 +1,6 @@
 package com.fatec.scireclass.model;
 
-import java.io.InputStream;
-
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,29 +9,17 @@ public class Video {
 
     @Id
     private String id;
-
     private String title;
-
     private String path;
-
     @DBRef
-    private Curso curso;
-
-    @Transient
-    private InputStream stream;
-
+    private Aula aula;
+    private Boolean ativo;
 
     public String getTitle() {
         return title;
     }
     public void setTitle(String title) {
         this.title = title;
-    }
-    public InputStream getStream() {
-        return stream;
-    }
-    public void setStream(InputStream stream) {
-        this.stream = stream;
     }
     public String getId() {
         return id;
@@ -48,11 +33,17 @@ public class Video {
     public void setPath(String path) {
         this.path = path;
     }
-    public Curso getCurso() {
-        return curso;
+    public Aula getAula() {
+        return aula;
     }
-    public void setCurso(Curso curso) {
-        this.curso = curso;
+    public void setAula(Aula aula) {
+        this.aula = aula;
+    }
+    public Boolean getAtivo() {
+        return ativo;
+    }
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 
     

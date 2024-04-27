@@ -12,6 +12,8 @@ public class Imagem {
     private String id;
     private String nome;
     private Binary image;
+    private String path;
+    private Boolean ativo;
     @DBRef
     private Curso curso;
 
@@ -39,6 +41,18 @@ public class Imagem {
     public void setCurso(Curso curso) {
         this.curso = curso;
     }
-
+    public String getPath() {
+        return path;
+    }
+    public void setPath(String path) {
+        this.path = path;
+    }
+    public Boolean getAtivo() {
+        return ativo;
+    }
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+    
     
 }
