@@ -13,7 +13,6 @@ public class Video {
     private String path;
     @DBRef
     private Aula aula;
-    private Boolean ativo;
 
     public String getTitle() {
         return title;
@@ -39,12 +38,5 @@ public class Video {
     public void setAula(Aula aula) {
         this.aula = aula;
     }
-    public Boolean getAtivo() {
-        return ativo;
-    }
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
-
     
 }
