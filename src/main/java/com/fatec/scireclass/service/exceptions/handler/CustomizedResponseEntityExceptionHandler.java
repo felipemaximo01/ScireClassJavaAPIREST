@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.azure.core.exception.ResourceNotFoundException;
 import com.fatec.scireclass.service.exceptions.CategoriaNotFoundException;
 import com.fatec.scireclass.service.exceptions.ChatNotFoundException;
 import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
@@ -35,7 +36,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({MatriculaNotFoundException.class, CursoNotFoundException.class,UsuarioNotFoundException.class,TokenNotFoundException.class,ChatNotFoundException.class,CategoriaNotFoundException.class})
+    @ExceptionHandler({MatriculaNotFoundException.class, CursoNotFoundException.class,UsuarioNotFoundException.class,TokenNotFoundException.class,ChatNotFoundException.class,CategoriaNotFoundException.class,ResourceNotFoundException.class})
     public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);

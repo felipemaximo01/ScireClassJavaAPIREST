@@ -1,20 +1,11 @@
-package com.fatec.scireclass.model;
+package com.fatec.scireclass.model.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+public class AulaDTO {
 
-@Document
-public class Aula {
-    @Id
     private String id;
     private String nome;
     private String descricao;
     private Integer ordem;
-    @DBRef
-    private Video video;
-    @DBRef
-    private Curso curso;
     
     public String getId() {
         return id;
@@ -33,18 +24,6 @@ public class Aula {
     }
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-    public Video getVideo() {
-        return video;
-    }
-    public void setVideo(Video video) {
-        this.video = video;
-    }
-    public Curso getCurso() {
-        return curso;
-    }
-    public void setCurso(Curso curso) {
-        this.curso = curso;
     }
     public Integer getOrdem() {
         return ordem;
