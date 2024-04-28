@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+import com.fatec.scireclass.service.Base64Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +41,9 @@ public class CursoController {
     private static final String NOTFOUNDUSUARIO = "Não foi encontrado o usuário com o ID: ";
 
     @PostMapping("/save/{criadorId}")
-    public ResponseEntity<CursoDTO> salvarCurso(@RequestPart("cadastroCurso") CadastroCursoDTO cadastroCursoDTO,@PathVariable String criadorId ,@RequestPart("file") MultipartFile file) throws GeneralSecurityException, IOException {
+    public ResponseEntity<CursoDTO> salvarCurso(@RequestBody CadastroCursoDTO cadastroCursoDTO,@PathVariable String criadorId) throws GeneralSecurityException, IOException {
         
-        CursoDTO cursoResponse = cursoService.cadastrarCurso(cadastroCursoDTO,criadorId,file);
+        CursoDTO cursoResponse = cursoService.cadastrarCurso(cadastroCursoDTO,criadorId, Base64Service.base64ToInputStream(cadastroCursoDTO.getImageBase64()));
 
         return new ResponseEntity<>(cursoResponse, HttpStatus.OK);
     }

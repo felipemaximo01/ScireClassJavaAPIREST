@@ -1,6 +1,7 @@
 package com.fatec.scireclass.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class CursoServiceImpl implements CursoService {
     private EnderecoRepository enderecoRepository;
 
     @Override
-    public CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO, String criadorId ,MultipartFile file) throws GeneralSecurityException, IOException {
+    public CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO, String criadorId , InputStream inputStream) throws GeneralSecurityException, IOException {
         Usuario usuario = usuarioRepository.findById(criadorId).get();
         if(usuario == null)
             throw new UsuarioNotFoundException("não foi encontrado o usuário com ID: " + criadorId);
@@ -55,7 +56,7 @@ public class CursoServiceImpl implements CursoService {
         endereco.setCurso(curso);
         enderecoRepository.save(endereco);
         curso = cursoRepository.save(curso);        
-        imagemService.addImage(curso.getNome() + UUID.randomUUID().toString(), curso.getId(), file);
+        imagemService.addImage(curso.getNome() + UUID.randomUUID().toString(), curso.getId(), inputStream);
         return CursoMapper.cursoToCursoDTO(curso);
     }
 

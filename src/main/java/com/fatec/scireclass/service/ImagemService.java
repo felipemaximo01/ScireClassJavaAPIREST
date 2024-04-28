@@ -1,6 +1,7 @@
 package com.fatec.scireclass.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.fatec.scireclass.model.dto.ImagemDTO;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,8 @@ import com.fatec.scireclass.model.Imagem;
 @Service
 public interface ImagemService {
 
-    ImagemDTO addImage(String nome, String cursoID, MultipartFile file) throws IOException;
+    ImagemDTO addImage(String nome, String cursoID, InputStream inputStream) throws IOException;
+    ImagemDTO addImage(String nome, String cursoID, MultipartFile multipartFile) throws IOException;
     ImagemDTO getImagem(String id);
     byte[] getFile(String path);
     void deleteImage(String path, String imagemId);

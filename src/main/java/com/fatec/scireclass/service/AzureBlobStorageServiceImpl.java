@@ -2,6 +2,7 @@ package com.fatec.scireclass.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,13 @@ public class AzureBlobStorageServiceImpl implements AzureBlobStorageService{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return path;
+    }
+
+    @Override
+    public String write(InputStream inputStream, String path) {
+        BlobClient blobClient = blobContainerClient.getBlobClient(path);
+        blobClient.upload(inputStream,false);
         return path;
     }
 

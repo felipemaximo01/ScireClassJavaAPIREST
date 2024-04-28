@@ -1,6 +1,8 @@
 package com.fatec.scireclass.service;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 
 import com.fatec.scireclass.model.dto.ImagemDTO;
 import com.fatec.scireclass.model.mapper.ImagemMapper;
@@ -26,6 +28,23 @@ public class ImagemServiceImpl implements ImagemService {
     private CursoRepository cursoRepository;
     @Autowired
     private AzureBlobStorageService azureBlobStorageService;
+
+    @Override
+    public ImagemDTO addImage(String nome,String cursoID, InputStream inputStream) throws IOException {
+        Curso curso = cursoRepository.findById(cursoID).get();
+        if(curso == null)
+            throw new CursoNotFoundException("O curso com ID: " +cursoID+" não foi encontrado");
+        String path = azureBlobStorageService.write(inputStream,"curso/"+cursoID+"/"+nome+ UUID.randomUUID().toString()+".png");
+
+        Imagem img = new Imagem();
+        img.setNome(nome);
+        img.setCurso(curso);
+        img.setPath(path);
+        img = imagemRepository.save(img);
+        curso.setImagem(img);
+        cursoRepository.save(curso);
+        return ImagemMapper.imagemToImagemDTO(img);
+    }
 
     @Override
     public ImagemDTO addImage(String nome,String cursoID, MultipartFile file) throws IOException {

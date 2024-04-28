@@ -1,6 +1,7 @@
 package com.fatec.scireclass.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import com.fatec.scireclass.model.dto.CursoDTO;
 
 @Service
 public interface CursoService {
-    CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO,String criadorId ,MultipartFile file) throws GeneralSecurityException, IOException;
+    CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO, String criadorId , InputStream inputStream) throws GeneralSecurityException, IOException;
 
     List<CursoDTO> encontrarDesc(String desc);
 
