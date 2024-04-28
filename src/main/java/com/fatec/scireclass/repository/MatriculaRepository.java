@@ -2,6 +2,7 @@ package com.fatec.scireclass.repository;
 
 import java.util.List;
 
+import com.fatec.scireclass.model.Usuario;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -16,6 +16,7 @@ public class CursoDTO {
     private Boolean ativo;
     private Modalidade modalidade;
     private Boolean aceitouTermos;
+    private Integer quantidadeAulas;
 
     public String getId() {
         return id;
@@ -96,5 +97,11 @@ public class CursoDTO {
         this.aceitouTermos = aceitouTermos;
     }
 
-    
+    public Integer getQuantidadeAulas() {
+        return quantidadeAulas;
+    }
+
+    public void setQuantidadeAulas(Integer quantidadeAulas) {
+        this.quantidadeAulas = quantidadeAulas;
+    }
 }

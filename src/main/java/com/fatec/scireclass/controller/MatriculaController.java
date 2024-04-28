@@ -2,6 +2,7 @@ package com.fatec.scireclass.controller;
 
 import java.util.List;
 
+import com.fatec.scireclass.model.dto.CursoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,6 +80,11 @@ public class MatriculaController {
     @PutMapping("/encerramatricula/{matriculaId}")
     public ResponseEntity<MatriculaDTO> encerraMatricula(@PathVariable String matriculaId){
         return new ResponseEntity<>(this.matriculaService.encerraMatricula(matriculaId), HttpStatus.OK);
+    }
+
+    @GetMapping("/curso/{usuarioId}")
+    public ResponseEntity<List<CursoDTO>> encontrarMatriculasLastFive(@PathVariable String usuarioId){
+        return new ResponseEntity<>(this.matriculaService.encontrarMatriculasLastFive(usuarioId), HttpStatus.OK);
     }
     
 }

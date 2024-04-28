@@ -2,6 +2,7 @@ package com.fatec.scireclass.service;
 
 import java.util.List;
 
+import com.fatec.scireclass.model.dto.CursoDTO;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Matricula;
@@ -29,5 +30,7 @@ public interface MatriculaService {
     List<MatriculaDTO> encontrarMatriculasPorCurso(String usuarioId, String cursoId);
 
     void excluirMatricula(String matriculaId);
+
+    List<CursoDTO> encontrarMatriculasLastFive(String usuarioId);
 
 }

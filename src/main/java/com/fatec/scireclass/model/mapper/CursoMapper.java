@@ -59,6 +59,14 @@ public class CursoMapper {
             cursoDTO.setModalidade(curso.getModalidade());
         if(curso.getAceitouTermos() != null)
             cursoDTO.setAceitouTermos(curso.getAceitouTermos());
+        if(curso.getAulas() != null){
+            if(curso.getAulas().isEmpty()){
+                cursoDTO.setQuantidadeAulas(0);
+            }else{
+                cursoDTO.setQuantidadeAulas(curso.getAulas().size());
+            }
+        }
+
 
         return cursoDTO;
     }
