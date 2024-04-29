@@ -31,7 +31,7 @@ public class ImagemServiceImpl implements ImagemService {
 
     @Override
     public ImagemDTO addImage(String nome,String cursoID, InputStream inputStream) throws IOException {
-        Curso curso = cursoRepository.findById(cursoID).get();
+        Curso curso = cursoRepository.findCursoById(cursoID);
         if(curso == null)
             throw new CursoNotFoundException("O curso com ID: " +cursoID+" não foi encontrado");
         String path = azureBlobStorageService.write(inputStream,"curso/"+cursoID+"/"+nome+ UUID.randomUUID().toString()+".png");
@@ -48,7 +48,7 @@ public class ImagemServiceImpl implements ImagemService {
 
     @Override
     public ImagemDTO addImage(String nome,String cursoID, MultipartFile file) throws IOException {
-        Curso curso = cursoRepository.findById(cursoID).get();
+        Curso curso = cursoRepository.findCursoById(cursoID);
         if(curso == null)
             throw new CursoNotFoundException("O curso com ID: " +cursoID+" não foi encontrado");
         String path = azureBlobStorageService.write(file,"curso/"+cursoID+"/"+nome+file.getOriginalFilename());
@@ -65,7 +65,7 @@ public class ImagemServiceImpl implements ImagemService {
 
     @Override
     public ImagemDTO getImagem(String id) {
-        Imagem imagem = imagemRepository.findById(id).get();
+        Imagem imagem = imagemRepository.findImagemById(id);
         if(imagem == null)
             throw new ResourceAccessException("Imagem não encontrada");
         return ImagemMapper.imagemToImagemDTO(imagem);

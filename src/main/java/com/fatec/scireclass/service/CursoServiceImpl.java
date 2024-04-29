@@ -41,7 +41,7 @@ public class CursoServiceImpl implements CursoService {
 
     @Override
     public CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO, String criadorId , InputStream inputStream) throws GeneralSecurityException, IOException {
-        Usuario usuario = usuarioRepository.findById(criadorId).get();
+        Usuario usuario = usuarioRepository.findUsuarioById(criadorId);
         if(usuario == null)
             throw new UsuarioNotFoundException("não foi encontrado o usuário com ID: " + criadorId);
         Categoria categoria = categoriaService.categoriaPorId(cadastroCursoDTO.getCategoriaDTO().getId());
@@ -73,7 +73,7 @@ public class CursoServiceImpl implements CursoService {
 
     @Override
     public List<CursoDTO> encontrarNome(String nome) {
-        List<Curso> cursos = cursoRepository.findByDescricaoLikeIgnoreCase(nome);
+        List<Curso> cursos = cursoRepository.findByNomeLikeIgnoreCase(nome);
         List<CursoDTO> cursoDTOs = new ArrayList<>();
         for (Curso curso : cursos) {
             CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(curso);

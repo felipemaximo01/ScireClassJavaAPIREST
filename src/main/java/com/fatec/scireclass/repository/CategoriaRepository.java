@@ -7,5 +7,5 @@ import com.fatec.scireclass.model.Categoria;
 
 @Repository
 public interface CategoriaRepository extends MongoRepository<Categoria,String> {
-    
+    Categoria findCategoriaById(String id);
 }

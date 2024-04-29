@@ -12,5 +12,7 @@ import com.fatec.scireclass.model.Mensagem;
 public interface MensagemRepository extends MongoRepository<Mensagem,String> {
 
     List<Mensagem> findByChat(Chat chat);
+
+    Mensagem findMensagemById(String id);
     
 }

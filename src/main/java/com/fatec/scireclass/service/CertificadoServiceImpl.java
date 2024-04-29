@@ -13,6 +13,7 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 
+
 public class CertificadoServiceImpl implements CertificadoService {
 
     private Certificado certificado = new Certificado();

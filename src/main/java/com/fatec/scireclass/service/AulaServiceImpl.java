@@ -25,7 +25,7 @@ public class AulaServiceImpl implements AulaService {
 
     @Override
     public List<AulaDTO> getAulas(String cursoId) {
-        Curso curso = cursoRepository.findById(cursoId).get();
+        Curso curso = cursoRepository.findCursoById(cursoId);
         if(curso == null)
             throw new CursoNotFoundException("O Curso de ID: " + cursoId + " não foi encontrado");
         List<Aula> aulas = aulaRepository.findByCurso(curso);
@@ -39,7 +39,7 @@ public class AulaServiceImpl implements AulaService {
 
     @Override
     public AulaDTO getAula(String aulaId) {
-        Aula aula = aulaRepository.findById(aulaId).get();
+        Aula aula = aulaRepository.findAulaById(aulaId);
         if(aula == null)
             throw new ResourceNotFoundException("Não foi encontrada a aula de ID:" + aulaId);
         return AulaMapper.aulaToAulaDTO(aula);
@@ -61,7 +61,7 @@ public class AulaServiceImpl implements AulaService {
 
     @Override
     public AulaDTO updateAula(AulaDTO aulaDTO, String aulaId) {
-        Aula aula = aulaRepository.findById(aulaId).get();
+        Aula aula = aulaRepository.findAulaById(aulaId);
         if(aula == null)
             throw new ResourceNotFoundException("Não foi encontrada a aula de ID:" + aulaId);
         if(aulaDTO.getNome() != null)
@@ -76,7 +76,7 @@ public class AulaServiceImpl implements AulaService {
 
     @Override
     public void deleteAula(String aulaId) {
-        Aula aula = aulaRepository.findById(aulaId).get();
+        Aula aula = aulaRepository.findAulaById(aulaId);
         if(aula == null)
             throw new ResourceNotFoundException("Não foi encontrada a aula de ID:" + aulaId);
         aulaRepository.delete(aula);

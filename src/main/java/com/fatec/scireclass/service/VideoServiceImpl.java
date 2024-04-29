@@ -75,11 +75,11 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public byte[] getFile(String path) {
-        return new byte[0];
+        return azureBlobStorageService.read(path);
     }
 
     @Override
-    public int getVideoDurationInMinutes(MultipartFile videoFile) throws IOException, InterruptedException {
+    public Double getVideoDurationInMinutes(MultipartFile videoFile) throws IOException, InterruptedException {
         File tempFile = File.createTempFile("video", "tmp");
         videoFile.transferTo(tempFile);
 
@@ -94,6 +94,6 @@ public class VideoServiceImpl implements VideoService {
         frameGrabber.stop();
         tempFile.delete();
 
-        return (int) (duration / 60);
+        return (duration / 60);
     }
 }

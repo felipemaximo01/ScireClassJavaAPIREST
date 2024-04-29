@@ -1,7 +1,6 @@
 package com.fatec.scireclass.service;
 
 
-import com.fatec.scireclass.model.dto.ImagemDTO;
 import com.fatec.scireclass.model.dto.VideoDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,5 +15,5 @@ public interface VideoService {
     List<VideoDTO> getAllVideos(String aulaId);
     void deleteVideo(String videoId, String path);
     byte[] getFile(String path);
-    int getVideoDurationInMinutes(MultipartFile file) throws IOException, InterruptedException;
+    Double getVideoDurationInMinutes(MultipartFile file) throws IOException, InterruptedException;
 }

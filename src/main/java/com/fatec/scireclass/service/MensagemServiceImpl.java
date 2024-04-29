@@ -38,7 +38,7 @@ public class MensagemServiceImpl implements MensagemService {
 
     @Override
     public Mensagem getMensagem(String id) {
-        return mensagemRepository.findById(id).get();
+        return mensagemRepository.findMensagemById(id);
     }
 
     @Override
@@ -48,10 +48,10 @@ public class MensagemServiceImpl implements MensagemService {
 
     @Override
     public Mensagem sendMensagem(MensagemDTO mensagemDTO, String chatID, String usuarioID) {
-        Chat chat = chatRepository.findById(chatID).get();
+        Chat chat = chatRepository.findChatById(chatID);
         if(chat == null)
             throw new ChatNotFoundException("o chat com o id: " + chatID + " não foi encontrado");
-        Usuario usuario = usuarioRepository.findById(usuarioID).get();
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioID);
         if(usuario == null)
             throw new UsuarioNotFoundException("O usuário com ID: " + usuarioID + " não foi encontrado");
         if(usuario.getId() != chat.getAluno().getId() && usuario.getId() != chat.getProfessor().getId())
@@ -75,7 +75,7 @@ public class MensagemServiceImpl implements MensagemService {
 
     @Override
     public List<MensagemDTO> getMensagens(String chatID) {
-        Chat chat = chatRepository.findById(chatID).get();
+        Chat chat = chatRepository.findChatById(chatID);
         if(chat == null)
             throw new ChatNotFoundException("O chat com ID: " + chatID+ " não foi encontrado");
         List<Mensagem> mensagens = mensagemRepository.findByChat(chat);

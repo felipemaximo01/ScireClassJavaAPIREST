@@ -9,4 +9,6 @@ import com.fatec.scireclass.model.Imagem;
 public interface ImagemRepository extends MongoRepository<Imagem, String> {
     
     Imagem findByCursoId(String cursoId);
+
+    Imagem findImagemById(String id);
 }

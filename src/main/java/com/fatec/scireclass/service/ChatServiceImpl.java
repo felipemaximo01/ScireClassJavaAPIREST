@@ -40,7 +40,7 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public Chat getChat(String id) {
-        return chatRepository.findById(id).get();
+        return chatRepository.findChatById(id);
     }
 
     @Override
@@ -50,12 +50,12 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public Chat createChat(String alunoID, String professorID) {
-        Usuario aluno = usuarioRepository.findById(alunoID).get();
+        Usuario aluno = usuarioRepository.findUsuarioById(alunoID);
         if(aluno == null)
             throw new UsuarioNotFoundException("O usuário com ID: " + alunoID + " não foi encontrado");
         if(aluno.getPerfil() != Perfil.ALUNO)
             throw new UsuarioUnauthorizedException("O usuário enviado não é um aluno");
-        Usuario professor = usuarioRepository.findById(professorID).get();
+        Usuario professor = usuarioRepository.findUsuarioById(professorID);
         if(professor == null)
             throw new UsuarioNotFoundException("O usuário com ID: " + professorID + " não foi encontrado");
         if(professor.getPerfil() != Perfil.PROFESSOR)
@@ -89,7 +89,7 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public List<ChatDTO> getChats(String usuarioID) {
-        Usuario usuario = usuarioRepository.findById(usuarioID).get();
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioID);
         if(usuario == null)
             throw new UsuarioNotFoundException("O usuário com ID: " +usuarioID+" não foi encontrado");
         List<Chat> chats = chatRepository.findByAlunoOrProfessor(usuario);
