@@ -11,9 +11,10 @@ import java.util.List;
 
 @Service
 public interface VideoService {
-    VideoDTO addVideo(String aulaId, MultipartFile file) throws IOException;
+    VideoDTO addVideo(String aulaId, MultipartFile file) throws IOException, InterruptedException;
     VideoDTO getVideo(String videoId);
     List<VideoDTO> getAllVideos(String aulaId);
     void deleteVideo(String videoId, String path);
     byte[] getFile(String path);
+    int getVideoDurationInMinutes(MultipartFile file) throws IOException, InterruptedException;
 }

@@ -10,7 +10,10 @@ import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.FilenameUtils;
 
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public class VideoServiceImpl implements VideoService {
     private AzureBlobStorageService azureBlobStorageService;
 
     @Override
-    public VideoDTO addVideo(String aulaId, MultipartFile file) throws IOException {
+    public VideoDTO addVideo(String aulaId, MultipartFile file) throws IOException, InterruptedException {
         Aula aula = aulaRepository.findById(aulaId).get();
         if(aula == null)
             throw new ResourceNotFoundException("Não foi possível encontrar uma aula");
@@ -37,6 +40,7 @@ public class VideoServiceImpl implements VideoService {
         video.setAula(aula);
         video.setPath(path);
         video.setTitle(file.getOriginalFilename());
+        video.setDurationInMinutes(getVideoDurationInMinutes(file));
         video = videoRepository.save(video);
         aula.setVideo(video);
         aulaRepository.save(aula);
@@ -74,5 +78,20 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public byte[] getFile(String path) {
         return new byte[0];
+    }
+
+    @Override
+    public int getVideoDurationInMinutes(MultipartFile videoFile) throws IOException, InterruptedException {
+        File tempFile = File.createTempFile("temp","."+FilenameUtils.getExtension(videoFile.getOriginalFilename()));
+        videoFile.transferTo(tempFile);
+        String[] command = {"ffmpeg", "-i", tempFile.getAbsolutePath(), "-show_entries", "format=duration", "-v", "quiet", "-of", "csv=p=0"};
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+        process.waitFor();
+        String output = new String(process.getInputStream().readAllBytes());
+        double durationInSeconds = Double.parseDouble(output.trim());
+        int durationInMinutes = (int) Math.round(durationInSeconds / 60);
+        tempFile.delete();
+        return durationInMinutes;
     }
 }

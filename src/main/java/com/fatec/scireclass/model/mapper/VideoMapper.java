@@ -16,6 +16,8 @@ public class VideoMapper {
             video.setTitle(videoDTO.getTitle());
         if(videoDTO.getPath() != null)
             video.setPath(videoDTO.getPath());
+        if(videoDTO.getDurationInMinutes() != null)
+            video.setDurationInMinutes(videoDTO.getDurationInMinutes());
         return video;
     }
 
@@ -27,6 +29,8 @@ public class VideoMapper {
             videoDTO.setPath(video.getPath());
         if(video.getId() != null)
             videoDTO.setId(video.getId());
+        if(video.getDurationInMinutes() != null)
+            videoDTO.setDurationInMinutes(video.getDurationInMinutes());
         return videoDTO;
     }
 }
