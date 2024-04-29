@@ -12,5 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface AulaRepository extends MongoRepository<Aula, String>{
 
     List<Aula> findByCurso(Curso curso);
+
+    Aula findAulaById(String id);
     
 }

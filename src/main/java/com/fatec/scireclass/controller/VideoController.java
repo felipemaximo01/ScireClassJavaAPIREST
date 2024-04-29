@@ -26,7 +26,7 @@ public class VideoController {
     private VideoService videoService;
 
     @PostMapping("/uploadvideo/{aulaId}")
-    public ResponseEntity<VideoDTO> upload(@RequestParam MultipartFile file, @PathVariable String aulaId) throws IOException {
+    public ResponseEntity<VideoDTO> upload(@RequestParam MultipartFile file, @PathVariable String aulaId) throws IOException, InterruptedException {
         return new ResponseEntity<>(videoService.addVideo(aulaId,file), HttpStatus.OK);
     }
 
