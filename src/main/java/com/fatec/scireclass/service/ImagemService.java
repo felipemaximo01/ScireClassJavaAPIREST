@@ -13,8 +13,8 @@ import com.fatec.scireclass.model.Imagem;
 public interface ImagemService {
 
     ImagemDTO addImage(String nome, String cursoID, InputStream inputStream) throws IOException;
-    ImagemDTO addImage(String nome, String cursoID, MultipartFile multipartFile) throws IOException;
     ImagemDTO getImagem(String id);
+    ImagemDTO getImagemByCursoId(String id);
     byte[] getFile(String path);
     void deleteImage(String path, String imagemId);
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.fatec.scireclass.model.dto.ImagemDTO;
 import com.fatec.scireclass.model.mapper.ImagemMapper;
+import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,31 +36,23 @@ public class ImagemServiceImpl implements ImagemService {
         if(curso == null)
             throw new CursoNotFoundException("O curso com ID: " +cursoID+" não foi encontrado");
         String path = azureBlobStorageService.write(inputStream,"curso/"+cursoID+"/"+nome+ UUID.randomUUID().toString()+".png");
-
         Imagem img = new Imagem();
-        img.setNome(nome);
-        img.setCurso(curso);
-        img.setPath(path);
-        img = imagemRepository.save(img);
-        curso.setImagem(img);
-        cursoRepository.save(curso);
-        return ImagemMapper.imagemToImagemDTO(img);
-    }
-
-    @Override
-    public ImagemDTO addImage(String nome,String cursoID, MultipartFile file) throws IOException {
-        Curso curso = cursoRepository.findCursoById(cursoID);
-        if(curso == null)
-            throw new CursoNotFoundException("O curso com ID: " +cursoID+" não foi encontrado");
-        String path = azureBlobStorageService.write(file,"curso/"+cursoID+"/"+nome+file.getOriginalFilename());
-
-        Imagem img = new Imagem();
-        img.setNome(nome);
-        img.setCurso(curso);
-        img.setPath(path);
-        img = imagemRepository.save(img);
-        curso.setImagem(img);
-        cursoRepository.save(curso);
+        if(curso.getImagem() != null && curso.getImagem().getId() != null){
+            img = imagemRepository.findByCursoId(curso.getId());
+            img.setNome(nome);
+            img.setCurso(curso);
+            img.setPath(path);
+            img = imagemRepository.save(img);
+            curso.setImagem(img);
+            cursoRepository.save(curso);
+        }else{
+            img.setNome(nome);
+            img.setCurso(curso);
+            img.setPath(path);
+            img = imagemRepository.save(img);
+            curso.setImagem(img);
+            cursoRepository.save(curso);
+        }
         return ImagemMapper.imagemToImagemDTO(img);
     }
 
@@ -67,7 +60,18 @@ public class ImagemServiceImpl implements ImagemService {
     public ImagemDTO getImagem(String id) {
         Imagem imagem = imagemRepository.findImagemById(id);
         if(imagem == null)
-            throw new ResourceAccessException("Imagem não encontrada");
+            throw new ResourceNotFoundException("Imagem não encontrada");
+        return ImagemMapper.imagemToImagemDTO(imagem);
+    }
+
+    @Override
+    public ImagemDTO getImagemByCursoId(String id) {
+        Curso curso = cursoRepository.findCursoById(id);
+        if(curso == null)
+            throw new ResourceNotFoundException("Curso não encontrado");
+        Imagem imagem = imagemRepository.findByCursoId(curso.getId());
+        if(imagem == null)
+            throw new ResourceNotFoundException("Imagem não encontrada");
         return ImagemMapper.imagemToImagemDTO(imagem);
     }
 
