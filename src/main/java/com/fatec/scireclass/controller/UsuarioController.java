@@ -162,8 +162,8 @@ public class UsuarioController {
         return new ResponseEntity<>(this.usuarioService.favoritado(usuarioId,cursoId), HttpStatus.OK);
     }
 
-    @PutMapping("/favorita")
-    public ResponseEntity<UsuarioDTO> favorita(String usuarioId, String cursoId){
+    @PutMapping("/favorita/{usuarioId}/{cursoId}")
+    public ResponseEntity<UsuarioDTO> favorita(@PathVariable String usuarioId, @PathVariable String cursoId){
 
         if(Boolean.FALSE.equals(this.usuarioService.favoritado(usuarioId,cursoId))){
             return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(this.usuarioService.favoritaCurso(usuarioId,cursoId)), HttpStatus.OK);

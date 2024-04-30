@@ -30,11 +30,11 @@ public class Curso {
     @DBRef
     private Usuario criador;
     @DBRef
-    private List<Matricula> matriculas;
+    private List<Matricula> matriculas = new ArrayList<>();
     @DBRef
     private Endereco endereco;
     @DBRef
-    private List<Comentario> comentarios;
+    private List<Comentario> comentarios = new ArrayList<>();
     @DBRef
     private Imagem imagem;
     @DBRef

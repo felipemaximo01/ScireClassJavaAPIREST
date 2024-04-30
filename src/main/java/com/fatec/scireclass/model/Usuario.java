@@ -1,6 +1,7 @@
 package com.fatec.scireclass.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,15 +34,15 @@ public class Usuario implements UserDetails {
     private Boolean ativo;
     private Boolean aceitouTermos;
     @DBRef
-    private List<Chat> chat;
+    private List<Chat> chat = new ArrayList<>();
     @DBRef
-    private List<Curso> cursoFavorito;
+    private List<Curso> cursoFavorito = new ArrayList<>();
     @DBRef
-    private List<Certificado> certificados;
+    private List<Certificado> certificados = new ArrayList<>();
     @DBRef
-    private List<Matricula> matriculas;
+    private List<Matricula> matriculas = new ArrayList<>();
     @DBRef
-    private List<Comentario> comentarios;
+    private List<Comentario> comentarios = new ArrayList<>();
     @DBRef
     private Endereco endereco;
     

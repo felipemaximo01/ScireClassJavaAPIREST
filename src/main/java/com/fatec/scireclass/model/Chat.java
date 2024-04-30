@@ -1,5 +1,6 @@
 package com.fatec.scireclass.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -16,7 +17,7 @@ public class Chat {
     @DBRef
     private Usuario professor;
     @DBRef
-    private List<Mensagem> mensagens;
+    private List<Mensagem> mensagens = new ArrayList<>();
 
     public String getId() {
         return id;
