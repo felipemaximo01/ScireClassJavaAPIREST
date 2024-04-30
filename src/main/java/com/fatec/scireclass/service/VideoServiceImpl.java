@@ -79,7 +79,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Double getVideoDurationInMinutes(MultipartFile videoFile) throws IOException, InterruptedException {
+    public int getVideoDurationInMinutes(MultipartFile videoFile) throws IOException, InterruptedException {
         File tempFile = File.createTempFile("video", "tmp");
         videoFile.transferTo(tempFile);
 
@@ -94,6 +94,6 @@ public class VideoServiceImpl implements VideoService {
         frameGrabber.stop();
         tempFile.delete();
 
-        return (duration / 60);
+        return (int) (duration / 60);
     }
 }

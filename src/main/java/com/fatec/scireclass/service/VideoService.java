@@ -15,5 +15,5 @@ public interface VideoService {
     List<VideoDTO> getAllVideos(String aulaId);
     void deleteVideo(String videoId, String path);
     byte[] getFile(String path);
-    Double getVideoDurationInMinutes(MultipartFile file) throws IOException, InterruptedException;
+    int getVideoDurationInMinutes(MultipartFile file) throws IOException, InterruptedException;
 }

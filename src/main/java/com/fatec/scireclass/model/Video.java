@@ -11,7 +11,7 @@ public class Video {
     private String id;
     private String title;
     private String path;
-    private Double durationInMinutes;
+    private Integer durationInMinutes;
     @DBRef
     private Aula aula;
 
@@ -40,11 +40,11 @@ public class Video {
         this.aula = aula;
     }
 
-    public Double getDurationInMinutes() {
+    public Integer getDurationInMinutes() {
         return durationInMinutes;
     }
 
-    public void setDurationInMinutes(Double durationInMinutes) {
+    public void setDurationInMinutes(Integer durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
     }
 }

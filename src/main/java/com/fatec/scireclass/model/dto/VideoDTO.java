@@ -4,7 +4,7 @@ public class VideoDTO {
     private String id;
     private String title;
     private String path;
-    private Double durationInMinutes;
+    private Integer durationInMinutes;
 
     public String getId() {
         return id;
@@ -30,11 +30,11 @@ public class VideoDTO {
         this.path = path;
     }
 
-    public Double getDurationInMinutes() {
+    public Integer getDurationInMinutes() {
         return durationInMinutes;
     }
 
-    public void setDurationInMinutes(Double durationInMinutes) {
+    public void setDurationInMinutes(Integer durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
     }
 }
