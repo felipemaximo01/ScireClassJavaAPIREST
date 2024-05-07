@@ -52,7 +52,7 @@ public class MatriculaServiceImpl implements MatriculaService {
         if(curso.getVagas() < 1)
             throw new CursoNotVagasException("Não há vagas para o curso: " + curso.getNome());
         if(Boolean.TRUE.equals(matriculaRepository.existsByAluno_IdAndCursoId(usuario.getId(),curso.getId())))
-            throw new MatriculaJaExisteException("O usuário de Id: " + usuarioId + " já está matriculado no curso de Id: " + cursoId);
+            throw new MatriculaJaExisteException("O usuário: " + usuario.getNome() + " já está matriculado no curso: " + curso.getNome());
         Matricula matricula = new Matricula();
         matricula.setAluno(usuario);
         matricula.setCurso(curso);
@@ -157,7 +157,9 @@ public class MatriculaServiceImpl implements MatriculaService {
         List<CursoDTO> cursosDTO = new ArrayList<>();
 
         for (Matricula matricula : matriculas) {
-            cursosDTO.add(CursoMapper.cursoToCursoDTO(matricula.getCurso()));
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(matricula.getCurso());
+            cursoDTO.setQuantidadeAulasAssistidas(matricula.getAulasAssistidas().size());
+            cursosDTO.add(cursoDTO);
         }
 
         return cursosDTO;

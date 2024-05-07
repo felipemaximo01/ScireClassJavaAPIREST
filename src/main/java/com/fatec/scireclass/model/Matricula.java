@@ -1,6 +1,8 @@
 package com.fatec.scireclass.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -18,6 +20,9 @@ public class Matricula {
     private Usuario aluno;
     @DBRef
     private Curso curso;
+
+    @DBRef
+    private List<Aula> aulasAssistidas = new ArrayList<>();
     
     public String getId() {
         return id;
@@ -62,5 +67,11 @@ public class Matricula {
         this.curso = curso;
     }
 
-    
+    public List<Aula> getAulasAssistidas() {
+        return aulasAssistidas;
+    }
+
+    public void setAulasAssistidas(List<Aula> aulasAssistidas) {
+        this.aulasAssistidas = aulasAssistidas;
+    }
 }

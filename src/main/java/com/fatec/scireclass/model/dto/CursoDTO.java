@@ -17,6 +17,7 @@ public class CursoDTO {
     private Modalidade modalidade;
     private Boolean aceitouTermos;
     private Integer quantidadeAulas;
+    private Integer quantidadeAulasAssistidas;
 
     public String getId() {
         return id;
@@ -103,5 +104,13 @@ public class CursoDTO {
 
     public void setQuantidadeAulas(Integer quantidadeAulas) {
         this.quantidadeAulas = quantidadeAulas;
+    }
+
+    public Integer getQuantidadeAulasAssistidas() {
+        return quantidadeAulasAssistidas;
+    }
+
+    public void setQuantidadeAulasAssistidas(Integer quantidadeAulasAssistidas) {
+        this.quantidadeAulasAssistidas = quantidadeAulasAssistidas;
     }
 }
