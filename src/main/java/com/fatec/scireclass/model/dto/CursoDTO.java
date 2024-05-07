@@ -18,6 +18,9 @@ public class CursoDTO {
     private Boolean aceitouTermos;
     private Integer quantidadeAulas;
     private Integer quantidadeAulasAssistidas;
+    private Integer minutosTotalCurso;
+    private String nomeCriador;
+    private String pathThumbnail;
 
     public String getId() {
         return id;
@@ -112,5 +115,29 @@ public class CursoDTO {
 
     public void setQuantidadeAulasAssistidas(Integer quantidadeAulasAssistidas) {
         this.quantidadeAulasAssistidas = quantidadeAulasAssistidas;
+    }
+
+    public Integer getMinutosTotalCurso() {
+        return minutosTotalCurso;
+    }
+
+    public void setMinutosTotalCurso(Integer minutosTotalCurso) {
+        this.minutosTotalCurso = minutosTotalCurso;
+    }
+
+    public String getNomeCriador() {
+        return nomeCriador;
+    }
+
+    public void setNomeCriador(String nomeCriador) {
+        this.nomeCriador = nomeCriador;
+    }
+
+    public String getPathThumbnail() {
+        return pathThumbnail;
+    }
+
+    public void setPathThumbnail(String pathThumbnail) {
+        this.pathThumbnail = pathThumbnail;
     }
 }

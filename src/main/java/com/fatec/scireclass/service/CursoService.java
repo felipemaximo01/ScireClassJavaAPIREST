@@ -35,4 +35,6 @@ public interface CursoService {
     List<CursoDTO> cursosCriador(Usuario usuario);
 
     Boolean excluirCurso(String cursoId, Usuario usuario);
+
+    List<CursoDTO> getAllCursos();
 }

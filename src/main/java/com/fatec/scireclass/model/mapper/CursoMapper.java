@@ -1,5 +1,6 @@
 package com.fatec.scireclass.model.mapper;
 
+import com.fatec.scireclass.model.Aula;
 import com.fatec.scireclass.model.Curso;
 import com.fatec.scireclass.model.dto.CursoDTO;
 
@@ -59,14 +60,21 @@ public class CursoMapper {
             cursoDTO.setModalidade(curso.getModalidade());
         if(curso.getAceitouTermos() != null)
             cursoDTO.setAceitouTermos(curso.getAceitouTermos());
-        if(curso.getAulas() != null){
-            if(curso.getAulas().isEmpty()){
+        if(curso.getAulas() != null) {
+            if (curso.getAulas().isEmpty()) {
                 cursoDTO.setQuantidadeAulas(0);
-            }else{
+            } else {
                 cursoDTO.setQuantidadeAulas(curso.getAulas().size());
+                cursoDTO.setMinutosTotalCurso(0);
+                for (Aula aula : curso.getAulas()) {
+                    cursoDTO.setMinutosTotalCurso(cursoDTO.getMinutosTotalCurso() + aula.getVideo().getDurationInMinutes());
+                }
             }
         }
-
+        if(curso.getCriador() != null && curso.getCriador().getNome() != null)
+            cursoDTO.setNomeCriador(curso.getCriador().getNome());
+        if(curso.getImagem() != null)
+            cursoDTO.setPathThumbnail(curso.getImagem().getPath());
 
         return cursoDTO;
     }

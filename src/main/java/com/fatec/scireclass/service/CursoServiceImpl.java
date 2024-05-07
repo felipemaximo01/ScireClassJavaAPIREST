@@ -198,4 +198,14 @@ public class CursoServiceImpl implements CursoService {
         return false;
     }
 
+    @Override
+    public List<CursoDTO> getAllCursos() {
+        List<Curso> cursos = cursoRepository.findAll();
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            cursoDTOs.add(CursoMapper.cursoToCursoDTO(curso));
+        }
+        return cursoDTOs;
+    }
+
 }

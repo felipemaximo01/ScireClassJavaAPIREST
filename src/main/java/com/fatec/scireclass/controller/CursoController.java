@@ -40,6 +40,11 @@ public class CursoController {
 
     private static final String NOTFOUNDUSUARIO = "Não foi encontrado o usuário com o ID: ";
 
+    @GetMapping
+    public ResponseEntity<List<CursoDTO>> findAll() {
+        return new ResponseEntity<>(cursoService.getAllCursos(), HttpStatus.OK);
+    }
+
     @PostMapping("/save/{criadorId}")
     public ResponseEntity<CursoDTO> salvarCurso(@RequestBody CadastroCursoDTO cadastroCursoDTO,@PathVariable String criadorId) throws GeneralSecurityException, IOException {
         
