@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fatec.scireclass.model.dto.CursoDTO;
 import com.fatec.scireclass.model.mapper.CursoMapper;
+import com.fatec.scireclass.service.exceptions.*;
 import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -22,11 +23,6 @@ import com.fatec.scireclass.model.mapper.MatriculaMapper;
 import com.fatec.scireclass.repository.CursoRepository;
 import com.fatec.scireclass.repository.MatriculaRepository;
 import com.fatec.scireclass.repository.UsuarioRepository;
-import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
-import com.fatec.scireclass.service.exceptions.CursoNotVagasException;
-import com.fatec.scireclass.service.exceptions.MatriculaJaExisteException;
-import com.fatec.scireclass.service.exceptions.MatriculaNotFoundException;
-import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 
 @Service
 public class MatriculaServiceImpl implements MatriculaService {
@@ -162,6 +158,22 @@ public class MatriculaServiceImpl implements MatriculaService {
             cursosDTO.add(cursoDTO);
         }
 
+        return cursosDTO;
+    }
+
+    @Override
+    public List<CursoDTO> findCursosByMatricula(String usuarioId) {
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
+        if(usuario == null)
+            throw new ResourceNotFoundException("Usuário Não Encontrado");
+        List<Matricula> matriculas = new ArrayList<>();
+        List<CursoDTO> cursosDTO = new ArrayList<>();
+        matriculas = matriculaRepository.findMatriculaByAluno(usuario);
+        for (Matricula matricula : matriculas) {
+            CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(matricula.getCurso());
+            cursoDTO.setQuantidadeAulasAssistidas(matricula.getAulasAssistidas().size());
+            cursosDTO.add(cursoDTO);
+        }
         return cursosDTO;
     }
 

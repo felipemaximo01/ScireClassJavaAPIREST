@@ -86,5 +86,9 @@ public class MatriculaController {
     public ResponseEntity<List<CursoDTO>> encontrarMatriculasLastFive(@PathVariable String usuarioId){
         return new ResponseEntity<>(this.matriculaService.encontrarMatriculasLastFive(usuarioId), HttpStatus.OK);
     }
-    
+
+    @GetMapping("/curso/all/{usuarioId}")
+    public ResponseEntity<List<CursoDTO>> findCursosByMatricula(@PathVariable String usuarioId){
+        return new ResponseEntity<>(matriculaService.findCursosByMatricula(usuarioId), HttpStatus.OK);
+    }
 }

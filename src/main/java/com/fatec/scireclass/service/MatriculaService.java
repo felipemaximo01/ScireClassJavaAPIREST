@@ -33,4 +33,6 @@ public interface MatriculaService {
 
     List<CursoDTO> encontrarMatriculasLastFive(String usuarioId);
 
+    List<CursoDTO> findCursosByMatricula(String usuarioId);
+
 }
