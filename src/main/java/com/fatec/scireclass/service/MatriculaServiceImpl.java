@@ -34,8 +34,6 @@ public class MatriculaServiceImpl implements MatriculaService {
     private MatriculaRepository matriculaRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
-    @Autowired
-    private MongoClient mongo;
 
     @Override
     public MatriculaDTO salvarMatricula(String usuarioId, String cursoId) {

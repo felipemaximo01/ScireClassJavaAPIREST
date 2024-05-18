@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+import com.fatec.scireclass.model.Curso;
+import com.fatec.scireclass.model.dto.CursoFilterDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,4 +39,6 @@ public interface CursoService {
     Boolean excluirCurso(String cursoId, Usuario usuario);
 
     List<CursoDTO> getAllCursos();
+
+    List<CursoDTO> cursosFilter(CursoFilterDTO cursoFilterDTO);
 }

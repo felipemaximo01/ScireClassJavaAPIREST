@@ -7,7 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.fatec.scireclass.model.dto.CursoFilterDTO;
+import com.fatec.scireclass.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,9 +40,13 @@ public class CursoServiceImpl implements CursoService {
     @Autowired
     private CategoriaService categoriaService;
     @Autowired
+    private CategoriaRepository categoriaRepository;
+    @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Override
     public CursoDTO cadastrarCurso(CadastroCursoDTO cadastroCursoDTO, String criadorId , InputStream inputStream) throws GeneralSecurityException, IOException {
@@ -205,6 +214,37 @@ public class CursoServiceImpl implements CursoService {
         for (Curso curso : cursos) {
             cursoDTOs.add(CursoMapper.cursoToCursoDTO(curso));
         }
+        return cursoDTOs;
+    }
+
+    @Override
+    public List<CursoDTO> cursosFilter(CursoFilterDTO cursoFilterDTO) {
+        List<Categoria> categorias = categoriaRepository.findAllById(cursoFilterDTO.getCategoriasID());
+        Query query = new Query();
+        if(cursoFilterDTO.getNomeCurso() != null && cursoFilterDTO.getNomeCurso() != ""){
+            query.addCriteria(Criteria.where("nome").regex(cursoFilterDTO.getNomeCurso(), "i"));
+        }
+        if(categorias != null && !categorias.isEmpty()){
+            query.addCriteria(Criteria.where("categoria").in(categorias));
+        }if(cursoFilterDTO.getPrecoMax() != null && cursoFilterDTO.getPrecoMin() != null){
+            query.addCriteria(Criteria.where("valor").gte(cursoFilterDTO.getPrecoMin()).lte(cursoFilterDTO.getPrecoMax()));
+        }if(cursoFilterDTO.getDuracao() != null && cursoFilterDTO.getDuracao() != ""){
+            String[] parts = cursoFilterDTO.getDuracao().split("-");
+            if (parts.length != 2) {
+                throw new IllegalArgumentException("Invalid duration format");
+            }
+            int minDuration = Integer.parseInt(parts[0].trim());
+            int maxDuration = Integer.parseInt(parts[1].trim());
+
+            query.addCriteria(Criteria.where("duracao").gte(minDuration * 60).lte(maxDuration * 60));
+        }
+
+        List<Curso> cursos = mongoTemplate.find(query, Curso.class);
+        List<CursoDTO> cursoDTOs = new ArrayList<>();
+        for (Curso curso : cursos) {
+            cursoDTOs.add(CursoMapper.cursoToCursoDTO(curso));
+        }
+
         return cursoDTOs;
     }
 

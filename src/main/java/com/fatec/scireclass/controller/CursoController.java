@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+import com.fatec.scireclass.model.dto.CursoFilterDTO;
 import com.fatec.scireclass.service.Base64Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -125,5 +126,10 @@ public class CursoController {
         }else{
             return new ResponseEntity<>("Falha ao excluir o curso", HttpStatus.UNAUTHORIZED);
         }
-    } 
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<List<CursoDTO>> cursosFilter(@RequestBody CursoFilterDTO cursoFilterDTO){
+        return new ResponseEntity<>(this.cursoService.cursosFilter(cursoFilterDTO), HttpStatus.OK);
+    }
 }

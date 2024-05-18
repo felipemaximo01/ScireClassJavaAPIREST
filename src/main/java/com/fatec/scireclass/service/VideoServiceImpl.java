@@ -1,10 +1,12 @@
 package com.fatec.scireclass.service;
 
 import com.fatec.scireclass.model.Aula;
+import com.fatec.scireclass.model.Curso;
 import com.fatec.scireclass.model.Video;
 import com.fatec.scireclass.model.dto.VideoDTO;
 import com.fatec.scireclass.model.mapper.VideoMapper;
 import com.fatec.scireclass.repository.AulaRepository;
+import com.fatec.scireclass.repository.CursoRepository;
 import com.fatec.scireclass.repository.VideoRepository;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -27,6 +29,8 @@ public class VideoServiceImpl implements VideoService {
     VideoRepository videoRepository;
     @Autowired
     private AzureBlobStorageService azureBlobStorageService;
+    @Autowired
+    private CursoRepository cursoRepository;
 
     @Override
     public VideoDTO addVideo(String aulaId, MultipartFile file) throws IOException, InterruptedException {
@@ -41,6 +45,13 @@ public class VideoServiceImpl implements VideoService {
         video.setDurationInMinutes(getVideoDurationInMinutes(file));
         video = videoRepository.save(video);
         aula.setVideo(video);
+        Curso curso = cursoRepository.findCursoById(aula.getCurso().getId());
+        if(curso.getDuracao() != null){
+            curso.setDuracao(curso.getDuracao() + video.getDurationInMinutes());
+        }else{
+            curso.setDuracao(video.getDurationInMinutes());
+        }
+        cursoRepository.save(curso);
         aulaRepository.save(aula);
         return VideoMapper.videoToVideoDTO(video);
     }
