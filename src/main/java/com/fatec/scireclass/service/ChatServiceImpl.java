@@ -83,6 +83,8 @@ public class ChatServiceImpl implements ChatService{
         mensagemHello = mensagemRepository.save(mensagemHello);
     
         chat.getMensagens().add(mensagemHello);
+        chat.setDtUltimaMensagem(mensagemHello.getInstante());
+        chat.setUltimaMensagem(mensagemHello.getMensagens());
     
         return chatRepository.save(chat);
     }
@@ -92,10 +94,22 @@ public class ChatServiceImpl implements ChatService{
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioID);
         if(usuario == null)
             throw new UsuarioNotFoundException("O usuário com ID: " +usuarioID+" não foi encontrado");
-        List<Chat> chats = chatRepository.findByAlunoOrProfessor(usuario);
+        List<Chat> chats = new ArrayList<>();
+        if(usuario.getPerfil() == Perfil.ALUNO){
+            chats = chatRepository.findByAlunoOrderByDtUltimaMensagemDesc(usuario);
+        }
+        if(usuario.getPerfil() == Perfil.PROFESSOR){
+            chats = chatRepository.findByProfessorOrderByDtUltimaMensagemDesc(usuario);
+        }
         List<ChatDTO> chatsDTO = new ArrayList<>();
         for (Chat chat : chats) {
-            chatsDTO.add(ChatMapper.ChatToChatDTO(chat));
+            ChatDTO chatDTO = ChatMapper.ChatToChatDTO(chat);
+            if(chat.getAluno().getId().equals(usuario.getId())){
+                chatDTO.setUsuario(chat.getProfessor().getNome());
+            }else if(chat.getProfessor().getId().equals(usuario.getId())){
+                chatDTO.setUsuario(chat.getAluno().getNome());
+            }
+            chatsDTO.add(chatDTO);
         }
         return chatsDTO;
     }

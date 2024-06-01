@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/video")
-@CrossOrigin(origins = "*")
 public class VideoController {
 
     @Autowired

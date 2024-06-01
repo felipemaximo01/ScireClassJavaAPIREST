@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/chat")
 public class ChatMessageController {
     @Autowired

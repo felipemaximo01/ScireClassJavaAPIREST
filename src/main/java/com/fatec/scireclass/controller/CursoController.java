@@ -30,7 +30,6 @@ import com.fatec.scireclass.service.exceptions.CursoNotFoundException;
 import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/curso")
 public class CursoController {
 

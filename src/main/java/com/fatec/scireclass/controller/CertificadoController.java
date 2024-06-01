@@ -27,7 +27,6 @@ import java.io.File;
 import java.nio.file.Paths;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/certificado")
 public class CertificadoController {
 

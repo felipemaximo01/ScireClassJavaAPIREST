@@ -22,7 +22,6 @@ import com.fatec.scireclass.service.MatriculaService;
 import com.fatec.scireclass.service.exceptions.MatriculaNotFoundException;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/matricula")
 public class MatriculaController {
 

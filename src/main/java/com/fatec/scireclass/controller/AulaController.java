@@ -12,7 +12,6 @@ import com.fatec.scireclass.service.AulaService;
 
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/aula")
 public class AulaController {
     @Autowired

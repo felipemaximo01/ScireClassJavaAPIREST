@@ -67,6 +67,8 @@ public class MensagemServiceImpl implements MensagemService {
         mensagem = mensagemRepository.save(mensagem);
 
         chat.getMensagens().add(mensagem);
+        chat.setDtUltimaMensagem(mensagem.getInstante());
+        chat.setUltimaMensagem(mensagem.getMensagens());
         
         chatRepository.save(chat);
 

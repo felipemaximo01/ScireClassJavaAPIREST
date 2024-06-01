@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/imagem")
-@CrossOrigin(origins = "*")
 public class ImagemController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.fatec.scireclass.model;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,10 @@ public class Chat {
     private Usuario professor;
     @DBRef
     private List<Mensagem> mensagens = new ArrayList<>();
+
+    private Instant dtUltimaMensagem;
+
+    private String ultimaMensagem;
 
     public String getId() {
         return id;
@@ -43,6 +48,20 @@ public class Chat {
     public void setProfessor(Usuario professor) {
         this.professor = professor;
     }
-    
-    
+
+    public Instant getDtUltimaMensagem() {
+        return dtUltimaMensagem;
+    }
+
+    public void setDtUltimaMensagem(Instant dtUltimaMensagem) {
+        this.dtUltimaMensagem = dtUltimaMensagem;
+    }
+
+    public String getUltimaMensagem() {
+        return ultimaMensagem;
+    }
+
+    public void setUltimaMensagem(String ultimaMensagem) {
+        this.ultimaMensagem = ultimaMensagem;
+    }
 }

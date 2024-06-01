@@ -1,12 +1,16 @@
 package com.fatec.scireclass.model.dto;
 
+import java.time.Instant;
+
 public class ChatDTO {
 
     private String id;
 
-    private UsuarioDTO professor;
+    private Instant dtUltimaMensagem;
 
-    private UsuarioDTO aluno;
+    private String usuario;
+
+    private String ultimaMensagem;
 
     public String getId() {
         return id;
@@ -16,21 +20,27 @@ public class ChatDTO {
         this.id = id;
     }
 
-    public UsuarioDTO getProfessor() {
-        return professor;
+    public Instant getDtUltimaMensagem() {
+        return dtUltimaMensagem;
     }
 
-    public void setProfessor(UsuarioDTO professor) {
-        this.professor = professor;
+    public void setDtUltimaMensagem(Instant dtUltimaMensagem) {
+        this.dtUltimaMensagem = dtUltimaMensagem;
     }
 
-    public UsuarioDTO getAluno() {
-        return aluno;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setAluno(UsuarioDTO aluno) {
-        this.aluno = aluno;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    
+    public String getUltimaMensagem() {
+        return ultimaMensagem;
+    }
+
+    public void setUltimaMensagem(String ultimaMensagem) {
+        this.ultimaMensagem = ultimaMensagem;
+    }
 }
