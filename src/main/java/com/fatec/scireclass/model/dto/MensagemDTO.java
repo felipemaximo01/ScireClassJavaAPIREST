@@ -7,6 +7,7 @@ public class MensagemDTO {
     private String mensagens;
     private Instant instante;
     private String nome;
+    private Boolean mine;
 
     public String getId() {
         return id;
@@ -32,7 +33,10 @@ public class MensagemDTO {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-
-    
+    public Boolean getMine() {
+        return mine;
+    }
+    public void setMine(Boolean mine) {
+        this.mine = mine;
+    }
 }

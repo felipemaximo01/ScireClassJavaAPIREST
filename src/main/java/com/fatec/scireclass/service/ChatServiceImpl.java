@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fatec.scireclass.service.exceptions.ChatNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +40,25 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public Chat getChat(String id) {
-        return chatRepository.findChatById(id);
+    public ChatDTO getChat(String id,String usuarioID) {
+        Chat chat = chatRepository.findChatById(id);
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioID);
+        if(usuario == null)
+            throw new UsuarioNotFoundException(usuarioID);
+        if(chat == null)
+            throw new ChatNotFoundException(id);
+
+        ChatDTO chatDTO = ChatMapper.ChatToChatDTO(chat);
+
+        if(chat.getAluno().getId().equals(usuario.getId())){
+            chatDTO.setUsuario(chat.getProfessor().getNome());
+        }else if(chat.getProfessor().getId().equals(usuario.getId())){
+            chatDTO.setUsuario(chat.getAluno().getNome());
+        }else {
+            throw new UsuarioUnauthorizedException(usuarioID);
+        }
+
+        return chatDTO;
     }
 
     @Override

@@ -11,7 +11,7 @@ import com.fatec.scireclass.model.dto.ChatDTO;
 public interface ChatService {
     Chat saveChat(Chat chat);
 
-    Chat getChat(String id);
+    ChatDTO getChat(String id, String usuarioID);
 
     void deleteChat(String id);
 

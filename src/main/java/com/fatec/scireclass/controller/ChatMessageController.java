@@ -5,12 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fatec.scireclass.model.dto.ChatDTO;
 import com.fatec.scireclass.model.dto.MensagemDTO;
@@ -18,9 +13,6 @@ import com.fatec.scireclass.model.mapper.ChatMapper;
 import com.fatec.scireclass.model.mapper.MensagemMapper;
 import com.fatec.scireclass.service.ChatService;
 import com.fatec.scireclass.service.MensagemService;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -38,7 +30,7 @@ public class ChatMessageController {
     }
 
     @PostMapping("/send/{chatID}/{usuarioID}")
-    public ResponseEntity<MensagemDTO> sendMensagem(@RequestBody MensagemDTO mensagemDTO, @PathVariable String chatID,@PathVariable String usuarioID){
+    public ResponseEntity<MensagemDTO> sendMensagem(@RequestBody MensagemDTO mensagemDTO, @PathVariable String chatID, @PathVariable String usuarioID){
         return new ResponseEntity<>(MensagemMapper.mensagemToMensagemDTO(mensagemService.sendMensagem(mensagemDTO, chatID, usuarioID)), HttpStatus.OK);
     }
 
@@ -48,9 +40,14 @@ public class ChatMessageController {
 
     }
 
-    @GetMapping("/getMessage/{chatID}")
-    public ResponseEntity<List<MensagemDTO>> getMensagens(@PathVariable String chatID) {
-        return new ResponseEntity<>(mensagemService.getMensagens(chatID),HttpStatus.OK);
+    @GetMapping("/getMessage/{chatID}/{usuarioID}")
+    public ResponseEntity<List<MensagemDTO>> getMensagens(@PathVariable String chatID, @PathVariable String usuarioID) {
+        return new ResponseEntity<>(mensagemService.getMensagens(chatID,usuarioID),HttpStatus.OK);
+    }
+
+    @GetMapping("/{chatID}/{usuarioID}")
+    public ResponseEntity<ChatDTO> getChat(@PathVariable String chatID, @PathVariable String usuarioID) {
+        return new ResponseEntity<>(chatService.getChat(chatID, usuarioID),HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteChat/{chatID}")

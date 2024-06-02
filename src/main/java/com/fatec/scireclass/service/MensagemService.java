@@ -18,6 +18,6 @@ public interface MensagemService {
 
     Mensagem sendMensagem(MensagemDTO mensagemDTO, String chatID, String usuarioID);
 
-    List<MensagemDTO> getMensagens(String chatID);
+    List<MensagemDTO> getMensagens(String chatID, String usuarioID);
     
 } 

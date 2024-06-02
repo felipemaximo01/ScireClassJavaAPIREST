@@ -3,7 +3,9 @@ package com.fatec.scireclass.service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,12 +51,10 @@ public class MensagemServiceImpl implements MensagemService {
     @Override
     public Mensagem sendMensagem(MensagemDTO mensagemDTO, String chatID, String usuarioID) {
         Chat chat = chatRepository.findChatById(chatID);
-        if(chat == null)
-            throw new ChatNotFoundException("o chat com o id: " + chatID + " não foi encontrado");
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioID);
-        if(usuario == null)
-            throw new UsuarioNotFoundException("O usuário com ID: " + usuarioID + " não foi encontrado");
-        if(usuario.getId() != chat.getAluno().getId() && usuario.getId() != chat.getProfessor().getId())
+        if(chat == null || usuario == null)
+            throw new ResourceNotFoundException("não foi encontrado");
+        if(!Objects.equals(usuario.getId(), chat.getAluno().getId()) && !Objects.equals(usuario.getId(), chat.getProfessor().getId()))
             throw new UsuarioUnauthorizedException("O usuário com ID: " + usuarioID + " não tem permissão para usar esse chat");
         
         Mensagem mensagem = new Mensagem();
@@ -76,14 +76,19 @@ public class MensagemServiceImpl implements MensagemService {
     }
 
     @Override
-    public List<MensagemDTO> getMensagens(String chatID) {
+    public List<MensagemDTO> getMensagens(String chatID, String usuarioID) {
         Chat chat = chatRepository.findChatById(chatID);
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioID);
+        if(usuario == null)
+            throw new UsuarioNotFoundException(usuarioID);
         if(chat == null)
             throw new ChatNotFoundException("O chat com ID: " + chatID+ " não foi encontrado");
         List<Mensagem> mensagens = mensagemRepository.findByChat(chat);
         List<MensagemDTO> mensagensDTO = new ArrayList<>();
         for (Mensagem mensagem : mensagens) {
-            mensagensDTO.add(MensagemMapper.mensagemToMensagemDTO(mensagem));
+            MensagemDTO  mensagemDTO =  MensagemMapper.mensagemToMensagemDTO(mensagem);
+            mensagemDTO.setMine(Objects.equals(mensagem.getUsuario().getId(), usuario.getId()));
+            mensagensDTO.add(mensagemDTO);
         }
         return mensagensDTO;
     }
