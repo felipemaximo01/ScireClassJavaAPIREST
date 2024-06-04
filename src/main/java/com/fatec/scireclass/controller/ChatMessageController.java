@@ -24,9 +24,9 @@ public class ChatMessageController {
     @Autowired
     private MensagemService mensagemService;
 
-    @PostMapping("/createChat/{alunoID}/{professorID}")
-    public ResponseEntity<ChatDTO> createChat(@PathVariable String alunoID, @PathVariable String professorID){
-        return new ResponseEntity<>(ChatMapper.ChatToChatDTO(chatService.createChat(alunoID, professorID)), HttpStatus.OK);
+    @PostMapping("/createChat/{alunoID}/{professorID}/{cursoID}")
+    public ResponseEntity<ChatDTO> createChat(@PathVariable String alunoID, @PathVariable String professorID,@PathVariable String cursoID){
+        return new ResponseEntity<>(ChatMapper.ChatToChatDTO(chatService.createChat(alunoID, professorID,cursoID)), HttpStatus.OK);
     }
 
     @PostMapping("/send/{chatID}/{usuarioID}")

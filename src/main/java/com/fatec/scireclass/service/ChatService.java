@@ -15,7 +15,7 @@ public interface ChatService {
 
     void deleteChat(String id);
 
-    Chat createChat(String alunoID, String professorID);
+    Chat createChat(String alunoID, String professorID,String cursoId);
 
     List<ChatDTO> getChats(String usuarioID);
 }

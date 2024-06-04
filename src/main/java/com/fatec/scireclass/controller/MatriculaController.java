@@ -89,4 +89,9 @@ public class MatriculaController {
     public ResponseEntity<List<CursoDTO>> findCursosByMatricula(@PathVariable String usuarioId){
         return new ResponseEntity<>(matriculaService.findCursosByMatricula(usuarioId), HttpStatus.OK);
     }
+
+    @PostMapping("/ativa/{cursoId}/{alunoId}/{chatId}")
+    public ResponseEntity<MatriculaDTO> ativaMatricula(@PathVariable String cursoId, @PathVariable String alunoId, @PathVariable String chatId){
+        return new ResponseEntity<>(matriculaService.ativaMatricula(cursoId,alunoId,chatId), HttpStatus.OK);
+    }
 }

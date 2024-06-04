@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fatec.scireclass.model.Chat;
 import com.fatec.scireclass.model.dto.CursoDTO;
+import com.fatec.scireclass.model.dto.MensagemDTO;
 import com.fatec.scireclass.model.mapper.CursoMapper;
 import com.fatec.scireclass.service.exceptions.*;
 import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -33,7 +36,11 @@ public class MatriculaServiceImpl implements MatriculaService {
     @Autowired
     private MatriculaRepository matriculaRepository;
     @Autowired
+    private ChatService chatService;
+    @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private MensagemService mensagemService;
 
     @Override
     public MatriculaDTO salvarMatricula(String usuarioId, String cursoId) {
@@ -47,17 +54,37 @@ public class MatriculaServiceImpl implements MatriculaService {
             throw new CursoNotVagasException("Não há vagas para o curso: " + curso.getNome());
         if(Boolean.TRUE.equals(matriculaRepository.existsByAluno_IdAndCursoId(usuario.getId(),curso.getId())))
             throw new MatriculaJaExisteException("O usuário: " + usuario.getNome() + " já está matriculado no curso: " + curso.getNome());
-        Matricula matricula = new Matricula();
-        matricula.setAluno(usuario);
-        matricula.setCurso(curso);
-        matricula.setDataInicio(LocalDateTime.now());
-        matricula.setNumeroMatricula(gerarNumeroMatricula());
-        curso.setVagas(curso.getVagas() - 1);
-        cursoRepository.save(curso);
-        matricula = this.matriculaRepository.save(matricula);
-        curso.getMatriculas().add(matricula);
-        cursoRepository.save(curso);
-        return MatriculaMapper.matriculaToMatriculaDTO(matricula);
+
+        if(curso.getModalidade().toString().equals("ONLINE")) {
+            Matricula matricula = new Matricula();
+            matricula.setAluno(usuario);
+            matricula.setCurso(curso);
+            matricula.setDataInicio(LocalDateTime.now());
+            matricula.setNumeroMatricula(gerarNumeroMatricula());
+            matricula.setAtivo(true);
+            curso.setVagas(curso.getVagas() - 1);
+            cursoRepository.save(curso);
+            matricula = this.matriculaRepository.save(matricula);
+            curso.getMatriculas().add(matricula);
+            cursoRepository.save(curso);
+            return MatriculaMapper.matriculaToMatriculaDTO(matricula);
+        }else if(curso.getModalidade().toString().equals("PRESENCIAL")){
+            Matricula matricula = new Matricula();
+            matricula.setAluno(usuario);
+            matricula.setCurso(curso);
+            matricula.setAtivo(false);
+            curso.setVagas(curso.getVagas() - 1);
+            cursoRepository.save(curso);
+            matricula = this.matriculaRepository.save(matricula);
+            curso.getMatriculas().add(matricula);
+            cursoRepository.save(curso);
+
+            chatService.createChat(usuario.getId(), curso.getCriador().getId(), curso.getId());
+
+            return MatriculaMapper.matriculaToMatriculaDTO(matricula);
+        }
+
+        return null;
     }
 
     @Override
@@ -168,13 +195,42 @@ public class MatriculaServiceImpl implements MatriculaService {
             throw new ResourceNotFoundException("Usuário Não Encontrado");
         List<Matricula> matriculas = new ArrayList<>();
         List<CursoDTO> cursosDTO = new ArrayList<>();
-        matriculas = matriculaRepository.findMatriculaByAluno(usuario);
+        matriculas = matriculaRepository.findMatriculaByAlunoAndAtivo(usuario, true);
         for (Matricula matricula : matriculas) {
             CursoDTO cursoDTO = CursoMapper.cursoToCursoDTO(matricula.getCurso());
             cursoDTO.setQuantidadeAulasAssistidas(matricula.getAulasAssistidas().size());
             cursosDTO.add(cursoDTO);
         }
         return cursosDTO;
+    }
+
+    @Override
+    public MatriculaDTO ativaMatricula(String cursoId, String alunoId, String chatId) {
+        Usuario usuario = usuarioRepository.findUsuarioById(alunoId);
+        if(usuario == null)
+            throw new ResourceNotFoundException("Usuário Não Encontrado");
+        Curso curso = cursoRepository.findCursoById(cursoId);
+        if(curso == null)
+            throw new CursoNotFoundException("Não foi encontrado o curso com ID: " + cursoId);
+        Matricula matricula = matriculaRepository.findMatriculaByAlunoAndCurso(usuario,curso);
+        if(matricula == null)
+            throw new ResourceNotFoundException("Matricula não encontrada");
+        if(matricula.getAtivo()){
+            return MatriculaMapper.matriculaToMatriculaDTO(matricula);
+        }
+
+        matricula.setAtivo(true);
+        matricula.setNumeroMatricula(gerarNumeroMatricula());
+        matricula.setDataInicio(LocalDateTime.now());
+
+        matricula = matriculaRepository.save(matricula);
+
+        MensagemDTO mensagemDTO = new MensagemDTO();
+        mensagemDTO.setMensagens("Matricula Ativada");
+
+        mensagemService.sendMensagem(mensagemDTO,chatId, curso.getCriador().getId());
+
+        return MatriculaMapper.matriculaToMatriculaDTO(matricula);
     }
 
     @Override

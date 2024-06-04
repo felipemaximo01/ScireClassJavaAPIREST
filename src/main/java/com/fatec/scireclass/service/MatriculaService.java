@@ -35,4 +35,6 @@ public interface MatriculaService {
 
     List<CursoDTO> findCursosByMatricula(String usuarioId);
 
+    MatriculaDTO ativaMatricula(String cursoId, String alunoId, String chatId);
+
 }

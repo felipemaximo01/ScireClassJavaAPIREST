@@ -27,6 +27,6 @@ public interface MatriculaRepository extends MongoRepository<Matricula,String> {
 
     List<Matricula> findAllByAluno_Id(String alunoId);
 
-    List<Matricula> findMatriculaByAluno(Usuario aluno);
+    List<Matricula> findMatriculaByAlunoAndAtivo(Usuario aluno, Boolean ativo);
     
 }

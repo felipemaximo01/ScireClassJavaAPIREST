@@ -18,6 +18,8 @@ public class Chat {
     @DBRef
     private Usuario professor;
     @DBRef
+    private Curso curso;
+    @DBRef
     private List<Mensagem> mensagens = new ArrayList<>();
 
     private Instant dtUltimaMensagem;
@@ -63,5 +65,13 @@ public class Chat {
 
     public void setUltimaMensagem(String ultimaMensagem) {
         this.ultimaMensagem = ultimaMensagem;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 }

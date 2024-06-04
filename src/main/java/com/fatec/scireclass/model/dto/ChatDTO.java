@@ -12,6 +12,8 @@ public class ChatDTO {
 
     private String ultimaMensagem;
 
+    private String cursoId;
+
     public String getId() {
         return id;
     }
@@ -19,6 +21,8 @@ public class ChatDTO {
     public void setId(String id) {
         this.id = id;
     }
+
+    private String usuarioId;
 
     public Instant getDtUltimaMensagem() {
         return dtUltimaMensagem;
@@ -42,5 +46,21 @@ public class ChatDTO {
 
     public void setUltimaMensagem(String ultimaMensagem) {
         this.ultimaMensagem = ultimaMensagem;
+    }
+
+    public String getCursoId() {
+        return cursoId;
+    }
+
+    public void setCursoId(String cursoId) {
+        this.cursoId = cursoId;
+    }
+
+    public String getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(String usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }

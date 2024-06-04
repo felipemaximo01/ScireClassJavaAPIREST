@@ -4,7 +4,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fatec.scireclass.model.Curso;
+import com.fatec.scireclass.repository.CursoRepository;
 import com.fatec.scireclass.service.exceptions.ChatNotFoundException;
+import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +35,9 @@ public class ChatServiceImpl implements ChatService{
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private static String MENSAGEMHELLO = "Olá professor eu gostaria de me matricular no seu curso !";
+    private static String MENSAGEMHELLO = "Olá professor eu gostaria de me matricular no seu curso ";
+    @Autowired
+    private CursoRepository cursoRepository;
 
     @Override
     public Chat saveChat(Chat chat) {
@@ -50,10 +55,13 @@ public class ChatServiceImpl implements ChatService{
 
         ChatDTO chatDTO = ChatMapper.ChatToChatDTO(chat);
 
+        chatDTO.setCursoId(chat.getCurso().getId());
+
         if(chat.getAluno().getId().equals(usuario.getId())){
             chatDTO.setUsuario(chat.getProfessor().getNome());
         }else if(chat.getProfessor().getId().equals(usuario.getId())){
             chatDTO.setUsuario(chat.getAluno().getNome());
+            chatDTO.setUsuarioId(chat.getAluno().getId());
         }else {
             throw new UsuarioUnauthorizedException(usuarioID);
         }
@@ -67,7 +75,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public Chat createChat(String alunoID, String professorID) {
+    public Chat createChat(String alunoID, String professorID, String cursoId) {
         Usuario aluno = usuarioRepository.findUsuarioById(alunoID);
         if(aluno == null)
             throw new UsuarioNotFoundException("O usuário com ID: " + alunoID + " não foi encontrado");
@@ -78,6 +86,9 @@ public class ChatServiceImpl implements ChatService{
             throw new UsuarioNotFoundException("O usuário com ID: " + professorID + " não foi encontrado");
         if(professor.getPerfil() != Perfil.PROFESSOR)
             throw new UsuarioUnauthorizedException("O usuário enviado não é um professor");
+        Curso curso = cursoRepository.findCursoById(cursoId);
+        if(curso == null)
+            throw new ResourceNotFoundException("Curso não encontrado");
 
         List<Chat> chats = chatRepository.findByAlunoAndProfessor(aluno, professor);
 
@@ -85,17 +96,18 @@ public class ChatServiceImpl implements ChatService{
 
         if(chats != null && chats.size() > 0){
              chat = chatRepository.findById(chats.get(0).getId()).get();
+             chat.setCurso(curso);
         }else{
             chat.setAluno(aluno);
             chat.setProfessor(professor);
-            
+            chat.setCurso(curso);
             chat = chatRepository.save(chat);
         }
         Mensagem mensagemHello = new Mensagem();
     
         mensagemHello.setChat(chat);
         mensagemHello.setUsuario(aluno);
-        mensagemHello.setMensagens(MENSAGEMHELLO);
+        mensagemHello.setMensagens(MENSAGEMHELLO + " " + curso.getNome() + "!");
         mensagemHello.setInstante(Instant.now());
     
         mensagemHello = mensagemRepository.save(mensagemHello);
