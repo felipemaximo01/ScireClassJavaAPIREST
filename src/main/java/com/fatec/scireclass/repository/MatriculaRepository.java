@@ -2,6 +2,7 @@ package com.fatec.scireclass.repository;
 
 import java.util.List;
 
+import com.fatec.scireclass.model.Curso;
 import com.fatec.scireclass.model.Usuario;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,7 @@ public interface MatriculaRepository extends MongoRepository<Matricula,String> {
 
     Integer countAllBy();
 
-    Matricula findMatriculaByAlunoAndCurso(String alunoId, String cursoId);
+    Matricula findMatriculaByAlunoAndCurso(Usuario aluno, Curso curso);
 
     List<Matricula> findAllByCurso_Criador_Id(String usuarioId);
     List<Matricula> findAllByCurso_Criador_IdAndCursoId(String usuarioId,String cursoId);

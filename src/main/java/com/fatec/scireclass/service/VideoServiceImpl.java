@@ -57,11 +57,14 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public VideoDTO getVideo(String videoId) {
-        Video video = videoRepository.findById(videoId).get();
-        if(video == null)
-            throw new ResourceNotFoundException("Video não foi encontrado");
-        return VideoMapper.videoToVideoDTO(video);
+    public VideoDTO getVideo(String aulaId) {
+        Aula aula = aulaRepository.findAulaById(aulaId);
+        if(aula == null)
+            throw new ResourceNotFoundException("Aula não encontrada");
+        if(aula.getVideo() == null)
+            throw new ResourceNotFoundException("Video não encontrado");
+
+        return VideoMapper.videoToVideoDTO(aula.getVideo());
     }
 
     @Override

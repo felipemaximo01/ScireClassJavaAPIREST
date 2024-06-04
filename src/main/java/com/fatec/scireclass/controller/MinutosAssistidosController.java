@@ -1,6 +1,5 @@
 package com.fatec.scireclass.controller;
 
-import com.azure.core.annotation.Post;
 import com.fatec.scireclass.model.dto.MinutosAssistidosDTO;
 import com.fatec.scireclass.service.MinutosAssistidosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/minutosAssistidos")
-public class MinutosAssistidos {
+public class MinutosAssistidosController {
 
     @Autowired
     private MinutosAssistidosService minutosAssistidosService;

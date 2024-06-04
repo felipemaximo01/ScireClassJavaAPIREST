@@ -2,6 +2,7 @@ package com.fatec.scireclass.controller;
 
 import java.util.List;
 
+import com.fatec.scireclass.model.dto.VideoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,11 @@ public class AulaController {
     @PostMapping("/save/{cursoId}")
     public ResponseEntity<AulaDTO> createAula(@RequestBody AulaDTO aulaDTO, @PathVariable String cursoId) {
         return new ResponseEntity<>(aulaService.createAula(aulaDTO, cursoId), HttpStatus.OK);
+    }
+
+    @PostMapping("/matricula/{usuarioId}/{aulaId}")
+    public ResponseEntity<VideoDTO> saveAulasAssistidas(@PathVariable String usuarioId, @PathVariable String aulaId) {
+        return new ResponseEntity<>(aulaService.saveAulasAssistidas(usuarioId, aulaId), HttpStatus.OK);
     }
 
     @PutMapping("/update/{aulaId}")

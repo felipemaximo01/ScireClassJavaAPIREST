@@ -60,7 +60,6 @@ public class MatriculaController {
 
     }
 
-
     @GetMapping("/matriculasporcriador/{usuarioId}")
     public ResponseEntity<List<MatriculaDTO>> matriculasPorCriador(@PathVariable String usuarioId){
         return new ResponseEntity<>(this.matriculaService.encontrarMatriculasPorCriador(usuarioId), HttpStatus.OK);

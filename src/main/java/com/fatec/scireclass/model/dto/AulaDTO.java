@@ -6,6 +6,7 @@ public class AulaDTO {
     private String nome;
     private String descricao;
     private Integer ordem;
+    private Integer duracao;
     
     public String getId() {
         return id;
@@ -32,5 +33,11 @@ public class AulaDTO {
         this.ordem = ordem;
     }
 
-    
+    public Integer getDuracao() {
+        return duracao;
+    }
+
+    public void setDuracao(Integer duracao) {
+        this.duracao = duracao;
+    }
 }

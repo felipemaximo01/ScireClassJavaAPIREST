@@ -55,6 +55,8 @@ public class MatriculaServiceImpl implements MatriculaService {
         curso.setVagas(curso.getVagas() - 1);
         cursoRepository.save(curso);
         matricula = this.matriculaRepository.save(matricula);
+        curso.getMatriculas().add(matricula);
+        cursoRepository.save(curso);
         return MatriculaMapper.matriculaToMatriculaDTO(matricula);
     }
 
@@ -92,7 +94,7 @@ public class MatriculaServiceImpl implements MatriculaService {
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
         if(usuario == null)
             throw new UsuarioNotFoundException("Não foi encontrado o usuario com ID: " + usuarioId);
-        Matricula matricula = matriculaRepository.findMatriculaByAlunoAndCurso(usuarioId,cursoId);
+        Matricula matricula = matriculaRepository.findMatriculaByAlunoAndCurso(usuario,curso);
         if(matricula == null)
             throw new MatriculaNotFoundException("Não foi possivel encontrar a matricula!");
         return MatriculaMapper.matriculaToMatriculaDTO(matricula);

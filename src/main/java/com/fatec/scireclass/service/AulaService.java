@@ -2,6 +2,7 @@ package com.fatec.scireclass.service;
 
 import java.util.List;
 
+import com.fatec.scireclass.model.dto.VideoDTO;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.dto.AulaDTO;
@@ -13,5 +14,7 @@ public interface AulaService {
     AulaDTO createAula(AulaDTO aulaDTO,String cursoId);
     AulaDTO updateAula(AulaDTO aulaDTO, String aulaId);
     void deleteAula(String aulaId);
+
+    VideoDTO saveAulasAssistidas(String usuarioId, String aulaId);
 
 }

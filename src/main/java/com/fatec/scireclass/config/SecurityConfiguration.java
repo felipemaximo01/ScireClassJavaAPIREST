@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/usuario/reenviarVerificacao").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuario/getToken").permitAll()
                         .requestMatchers(HttpMethod.GET, "/imagem/downloadImage").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/video/downloadvideo").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
             )
