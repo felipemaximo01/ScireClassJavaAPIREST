@@ -131,4 +131,9 @@ public class CursoController {
     public ResponseEntity<List<CursoDTO>> cursosFilter(@RequestBody CursoFilterDTO cursoFilterDTO){
         return new ResponseEntity<>(this.cursoService.cursosFilter(cursoFilterDTO), HttpStatus.OK);
     }
+
+    @PostMapping("/avaliar")
+    public ResponseEntity<CursoDTO> avaliarCurso(@RequestBody CursoDTO cursoDTO){
+        return new ResponseEntity<>(cursoService.avaliarCurso(cursoDTO), HttpStatus.OK);
+    }
 }

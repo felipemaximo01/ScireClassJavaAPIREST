@@ -75,6 +75,16 @@ public class CursoMapper {
             cursoDTO.setNomeCriador(curso.getCriador().getNome());
         if(curso.getImagem() != null)
             cursoDTO.setPathThumbnail(curso.getImagem().getPath());
+        if(!curso.getAvaliacao().isEmpty()){
+            Double avaliacao = 0.0;
+            for(Double av2 : curso.getAvaliacao()){
+                avaliacao += av2;
+            }
+            cursoDTO.setAvaliacao(avaliacao/curso.getAvaliacao().size());
+        }else{
+            cursoDTO.setAvaliacao(0.0);
+        }
+
 
         return cursoDTO;
     }

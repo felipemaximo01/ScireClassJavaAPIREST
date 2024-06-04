@@ -248,4 +248,17 @@ public class CursoServiceImpl implements CursoService {
         return cursoDTOs;
     }
 
+    @Override
+    public CursoDTO avaliarCurso(CursoDTO cursoDTO) {
+        Curso curso = cursoRepository.findCursoById(cursoDTO.getId());
+        if(curso == null)
+            throw new CursoNotFoundException("Não foi possivel encontrar o curso com o ID: " + cursoDTO.getId());
+
+       curso.getAvaliacao().add(cursoDTO.getAvaliacao());
+
+       curso = cursoRepository.save(curso);
+
+       return CursoMapper.cursoToCursoDTO(curso);
+    }
+
 }

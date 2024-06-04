@@ -41,4 +41,6 @@ public interface CursoService {
     List<CursoDTO> getAllCursos();
 
     List<CursoDTO> cursosFilter(CursoFilterDTO cursoFilterDTO);
+
+    CursoDTO avaliarCurso(CursoDTO cursoDTO);
 }

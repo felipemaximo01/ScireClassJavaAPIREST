@@ -21,7 +21,7 @@ public class Curso {
     private String telefone;
     private String email;
     private Double valor;
-    private Double avaliacao;
+    private List<Double> avaliacao = new ArrayList<>();
     private Integer vagas;
     private Boolean ativo;
     private Modalidade modalidade;
@@ -90,10 +90,10 @@ public class Curso {
     public void setValor(Double valor) {
         this.valor = valor;
     }
-    public Double getAvaliacao() {
+    public List<Double> getAvaliacao() {
         return avaliacao;
     }
-    public void setAvaliacao(Double avaliacao) {
+    public void setAvaliacao(List<Double> avaliacao) {
         this.avaliacao = avaliacao;
     }
     public Integer getVagas() {
