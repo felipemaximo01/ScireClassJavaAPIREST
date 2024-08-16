@@ -171,6 +171,11 @@ public class UsuarioController {
 
     }
 
+    @PutMapping("/v1/edita")
+    public ResponseEntity<UsuarioDTO> editaUsuario(@RequestBody CadastroDTO cadastroDTO){
+        return new ResponseEntity<>(usuarioService.editarUsuario(cadastroDTO.getUsuarioDTO(), cadastroDTO.getEnderecoDTO()), HttpStatus.OK);
+    }
+
     @DeleteMapping("/excluir/{usuarioId}")
     public ResponseEntity<String> excluiUsuario(@PathVariable String usuarioId){
 

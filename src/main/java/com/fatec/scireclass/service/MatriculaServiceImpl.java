@@ -141,8 +141,10 @@ public class MatriculaServiceImpl implements MatriculaService {
             }
         }
         for (Matricula matricula : matriculasfinalizadas) {
-            MatriculaDTO matriculaDTO = new MatriculaDTO();
-            MatriculaMapper.matriculaToMatriculaDTO(matricula);
+            MatriculaDTO matriculaDTO = MatriculaMapper.matriculaToMatriculaDTO(matricula);
+            matriculaDTO.setNomeCurso(matricula.getCurso().getNome());
+            matriculaDTO.setNomeProfessor(matricula.getCurso().getCriador().getNome());
+
             matriculasDTO.add(matriculaDTO);
         }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -208,5 +209,38 @@ public class UsuarioServiceImpl implements UsuarioService{
     @Override
     public Usuario salvaUsuario(Usuario usuario){
         return usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public UsuarioDTO editarUsuario(UsuarioDTO usuarioDTO, EnderecoDTO enderecoDTO) {
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioDTO.getId());
+        if(usuario == null)
+            throw new ResourceNotFoundException("Usuario não encontrado");
+
+        Endereco endereco = enderecoRepository.findByUsuario(usuario);
+        if(endereco == null)
+            throw new ResourceNotFoundException("Endereço não encontrado");
+
+        if(usuarioDTO.getNome() != null)
+            usuario.setNome(usuarioDTO.getNome());
+        if(enderecoDTO.getCep() != null)
+            endereco.setCep(enderecoDTO.getCep());
+        if(enderecoDTO.getLogradouro() != null)
+            endereco.setLogradouro(enderecoDTO.getLogradouro());
+        if(enderecoDTO.getComplemento() != null)
+            endereco.setComplemento(enderecoDTO.getComplemento());
+        if(enderecoDTO.getBairro() != null)
+            endereco.setBairro(enderecoDTO.getBairro());
+        if(enderecoDTO.getLocalidade() != null)
+            endereco.setLocalidade(enderecoDTO.getLocalidade());
+        if(enderecoDTO.getUf() != null)
+            endereco.setUf(enderecoDTO.getUf());
+        if(enderecoDTO.getNumero() != null)
+            endereco.setNumero(enderecoDTO.getNumero());
+
+        usuario = usuarioRepository.save(usuario);
+        enderecoRepository.save(endereco);
+
+        return UsuarioMapper.usuarioToUsuarioDTO(usuario);
     }
 }

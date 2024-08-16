@@ -38,8 +38,6 @@ public class Usuario implements UserDetails {
     @DBRef
     private List<Curso> cursoFavorito = new ArrayList<>();
     @DBRef
-    private List<Certificado> certificados = new ArrayList<>();
-    @DBRef
     private List<Matricula> matriculas = new ArrayList<>();
     @DBRef
     private List<Comentario> comentarios = new ArrayList<>();
@@ -141,12 +139,6 @@ public class Usuario implements UserDetails {
     }
     public void setChat(List<Chat> chat) {
         this.chat = chat;
-    }
-    public List<Certificado> getCertificados() {
-        return certificados;
-    }
-    public void setCertificados(List<Certificado> certificados) {
-        this.certificados = certificados;
     }
     public List<Matricula> getMatriculas() {
         return matriculas;

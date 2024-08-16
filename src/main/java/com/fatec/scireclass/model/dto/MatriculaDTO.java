@@ -9,6 +9,8 @@ public class MatriculaDTO {
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
     private Boolean ativo;
+    private String nomeCurso;
+    private String nomeProfessor;
     
     public String getId() {
         return id;
@@ -41,6 +43,19 @@ public class MatriculaDTO {
         this.ativo = ativo;
     }
 
-    
-    
+    public String getNomeCurso() {
+        return nomeCurso;
+    }
+
+    public void setNomeCurso(String nomeCurso) {
+        this.nomeCurso = nomeCurso;
+    }
+
+    public String getNomeProfessor() {
+        return nomeProfessor;
+    }
+
+    public void setNomeProfessor(String nomeProfessor) {
+        this.nomeProfessor = nomeProfessor;
+    }
 }

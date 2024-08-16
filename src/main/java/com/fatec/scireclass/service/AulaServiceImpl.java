@@ -1,5 +1,6 @@
 package com.fatec.scireclass.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,16 +119,32 @@ public class AulaServiceImpl implements AulaService {
         if(matricula.getAulasAssistidas().isEmpty()){
             matricula.getAulasAssistidas().add(aula);
         }else{
+            matricula.getAulasAssistidas().add(aula);
             for(Aula aula1 : matricula.getAulasAssistidas()){
                 if(aula1.getId().equals(aula.getId())){
+                    if(matricula.getAulasAssistidas().getLast().getId().equals(aula.getId())){
+                        if(matricula.getAulasAssistidas().size() == matricula.getCurso().getAulas().size()){
+                            matricula.setDataFim(LocalDateTime.now());
+                            matriculaRepository.save(matricula);
+                        }
+                    }
                     return VideoMapper.videoToVideoDTO(aula.getVideo());
                 }
             }
         }
 
-        matricula.getAulasAssistidas().add(aula);
 
-        matriculaRepository.save(matricula);
+
+
+
+        matricula = matriculaRepository.save(matricula);
+
+        if(matricula.getAulasAssistidas().getLast().getId().equals(aula.getId())){
+            if(matricula.getAulasAssistidas().size() == matricula.getCurso().getAulas().size()){
+                matricula.setDataFim(LocalDateTime.now());
+                matriculaRepository.save(matricula);
+            }
+        }
 
         return VideoMapper.videoToVideoDTO(aula.getVideo());
     }

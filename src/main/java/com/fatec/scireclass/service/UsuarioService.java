@@ -36,4 +36,6 @@ public interface UsuarioService {
     Usuario mudarSenha(TokenSenhaReset tokenSenhaReset, String senha);
 
     Usuario salvaUsuario(Usuario usuario);
+
+    UsuarioDTO editarUsuario(UsuarioDTO usuarioDTO, EnderecoDTO enderecoDTO);
 }
