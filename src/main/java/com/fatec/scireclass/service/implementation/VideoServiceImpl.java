@@ -1,4 +1,4 @@
-package com.fatec.scireclass.service;
+package com.fatec.scireclass.service.implementation;
 
 import com.fatec.scireclass.model.Aula;
 import com.fatec.scireclass.model.Curso;
@@ -8,6 +8,8 @@ import com.fatec.scireclass.model.mapper.VideoMapper;
 import com.fatec.scireclass.repository.AulaRepository;
 import com.fatec.scireclass.repository.CursoRepository;
 import com.fatec.scireclass.repository.VideoRepository;
+import com.fatec.scireclass.service.AzureBlobStorageService;
+import com.fatec.scireclass.service.VideoService;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.springframework.beans.factory.annotation.Autowired;

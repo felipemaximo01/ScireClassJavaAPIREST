@@ -33,6 +33,8 @@ public class Usuario implements UserDetails {
     private Perfil perfil;
     private Boolean ativo;
     private Boolean aceitouTermos;
+    private String categoria;
+    private String categoria2;
     @DBRef
     private List<Chat> chat = new ArrayList<>();
     @DBRef
@@ -177,7 +179,19 @@ public class Usuario implements UserDetails {
         return email;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
 
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
-    
+    public String getCategoria2() {
+        return categoria2;
+    }
+
+    public void setCategoria2(String categoria2) {
+        this.categoria2 = categoria2;
+    }
 }

@@ -21,6 +21,7 @@ public class CursoDTO {
     private Integer minutosTotalCurso;
     private String nomeCriador;
     private String pathThumbnail;
+    private String categoria;
 
     public String getId() {
         return id;
@@ -139,5 +140,13 @@ public class CursoDTO {
 
     public void setPathThumbnail(String pathThumbnail) {
         this.pathThumbnail = pathThumbnail;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

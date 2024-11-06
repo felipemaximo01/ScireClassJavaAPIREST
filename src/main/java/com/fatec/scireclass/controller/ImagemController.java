@@ -1,7 +1,7 @@
 package com.fatec.scireclass.controller;
 
 import com.fatec.scireclass.model.dto.ImagemDTO;
-import com.fatec.scireclass.service.Base64Service;
+import com.fatec.scireclass.service.implementation.Base64Service;
 import com.fatec.scireclass.service.ImagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.UUID;

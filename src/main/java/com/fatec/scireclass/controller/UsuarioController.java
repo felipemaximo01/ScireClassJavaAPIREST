@@ -1,13 +1,27 @@
 package com.fatec.scireclass.controller;
 
-import java.util.Calendar;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.*;
 
+import com.fatec.scireclass.model.*;
+import com.fatec.scireclass.model.dto.EnderecoDTO;
+import com.fatec.scireclass.model.enums.Perfil;
+import com.fatec.scireclass.model.mapper.EnderecoMapper;
+import com.fatec.scireclass.repository.*;
+import com.fatec.scireclass.service.implementation.TokenService;
+import com.github.javafaker.Faker;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import com.fatec.scireclass.model.TokenSenhaReset;
-import com.fatec.scireclass.model.TokenVerificacao;
-import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.model.dto.CadastroDTO;
 import com.fatec.scireclass.model.dto.TokenDTO;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
@@ -52,7 +63,17 @@ public class UsuarioController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private com.fatec.scireclass.service.TokenService tokenService;
+    private TokenService tokenService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+    @Autowired
+    private CursoRepository cursoRepository;
+    @Autowired
+    private MatriculaRepository matriculaRepository;
 
 
     @PostMapping("/save")
@@ -63,6 +84,108 @@ public class UsuarioController {
         eventPublisher.publishEvent(new CadastroEvent(usuario,request.getLocale(), appUrl));
         return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(usuario), HttpStatus.OK);
 
+    }
+
+    @PostMapping("/automatizaUsuarios")
+    public void automatizando(){
+
+        List<Categoria> categorias = categoriaRepository.findAll();
+
+        for(int i = 0; i < 200; i++){
+            Faker faker = new Faker(new Locale("pt_BR"));
+            Usuario usuario = new Usuario();
+            usuario.setNome(faker.name().fullName());
+            usuario.setEmail(faker.internet().emailAddress());
+            usuario.setSenha(faker.internet().password());
+            String encryptedPassword = new BCryptPasswordEncoder().encode(usuario.getSenha());
+            usuario.setSenha(encryptedPassword);
+            usuario.setCpf(faker.numerify("###.###.###-##"));
+            usuario.setPerfil(Perfil.ALUNO);
+            usuario.setAtivo(true);
+            usuarioRepository.save(usuario);
+
+            String enderecoJson = buscarCep(gerarCepSP());
+
+            Gson gson = new Gson();
+            EnderecoDTO endereco = gson.fromJson(enderecoJson, EnderecoDTO.class);
+            endereco.setNumero(gerarNumeroResidencial() + "");
+            Endereco endereco1 = EnderecoMapper.enderecoDTOToEndereco(endereco);
+            enderecoRepository.save(endereco1);
+            usuario.setEndereco(endereco1);
+            endereco1.setUsuario(usuario);
+            enderecoRepository.save(endereco1);
+            usuarioRepository.save(usuario);
+
+            Random random = new Random();
+
+            Categoria categoria = categorias.get(random.nextInt(categorias.size()));
+
+            List<Curso> cursos = cursoRepository.findByCategoria(categoria);
+
+            Matricula matricula = new Matricula();
+
+            matricula.setAtivo(true);
+            matricula.setCurso(cursos.get(random.nextInt(cursos.size())));
+            matricula.setAluno(usuario);
+            LocalDateTime localDateTime = LocalDateTime.now();
+            matricula.setDataInicio(localDateTime);
+            matricula.setNumeroMatricula(i);
+            matriculaRepository.save(matricula);
+        }
+    }
+
+    public static String buscarCep(String cep) {
+        String urlString = "https://viacep.com.br/ws/" + cep + "/json/";
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Falha na requisição HTTP: " + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            StringBuilder response = new StringBuilder();
+            String output;
+            while ((output = br.readLine()) != null) {
+                response.append(output);
+            }
+
+            conn.disconnect();
+            return response.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String gerarCepSP() {
+        Random random = new Random();
+
+        // Prefixos típicos de CEPs em SP
+        int[] prefixosSP = {
+                1000, 1100, 1200, 1300, 1400, 1500, 2000, 2100, 2200, 2300,
+                2400, 2500, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700,
+                4000, 4100, 4200, 4300, 4400, 4500, 4600, 5000, 5100, 5200,
+                5300, 5400, 5500, 5600, 5700, 5800, 5900, 6000, 6100, 6200,
+                6300, 6400, 6500, 6600, 6700, 6800, 6900, 7000, 7100, 7200,
+                7300, 7400, 7500, 8000, 8100, 8200, 8300, 8400, 8500, 8600
+        };
+
+        int prefixo = prefixosSP[random.nextInt(prefixosSP.length)];
+        int sufixo = random.nextInt(1000); // Gera o sufixo de 000 a 999
+
+        // Formatar o CEP como XXXXX-XXX
+        return String.format("%05d%03d", prefixo, sufixo);
+    }
+
+    // Função para gerar número residencial aleatório
+    private static int gerarNumeroResidencial() {
+        Random random = new Random();
+        return random.nextInt(9999) + 1; // Gera um número residencial entre 1 e 9999
     }
 
     @PutMapping("/confirmarCadastro")

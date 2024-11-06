@@ -1,4 +1,4 @@
-package com.fatec.scireclass.service;
+package com.fatec.scireclass.service.implementation;
 
 import com.fatec.scireclass.model.MinutosAssistidos;
 import com.fatec.scireclass.model.Usuario;
@@ -6,6 +6,7 @@ import com.fatec.scireclass.model.dto.MinutosAssistidosDTO;
 import com.fatec.scireclass.model.mapper.MinutosAssistidosMapper;
 import com.fatec.scireclass.repository.MinutosAssistidosRepository;
 import com.fatec.scireclass.repository.UsuarioRepository;
+import com.fatec.scireclass.service.MinutosAssistidosService;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class MinutosAssistidosServiceImpl implements MinutosAssistidosService{
+public class MinutosAssistidosServiceImpl implements MinutosAssistidosService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

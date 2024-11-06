@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,7 @@ import org.springframework.http.MediaType;
 
 import com.fatec.scireclass.model.Certificado;
 import com.fatec.scireclass.model.Matricula;
-import com.fatec.scireclass.service.CertificadoServiceImpl;
+import com.fatec.scireclass.service.implementation.CertificadoServiceImpl;
 import com.fatec.scireclass.service.MatriculaService;
 import com.fatec.scireclass.service.exceptions.MatriculaNaoFinalizadaException;
 import com.fatec.scireclass.service.exceptions.MatriculaNotFoundException;

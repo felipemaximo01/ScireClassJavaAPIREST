@@ -1,9 +1,10 @@
-package com.fatec.scireclass.service;
+package com.fatec.scireclass.service.implementation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.fatec.scireclass.service.AzureBlobStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,7 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 
 @Service
-public class AzureBlobStorageServiceImpl implements AzureBlobStorageService{
+public class AzureBlobStorageServiceImpl implements AzureBlobStorageService {
 
     @Autowired
     private BlobContainerClient blobContainerClient;

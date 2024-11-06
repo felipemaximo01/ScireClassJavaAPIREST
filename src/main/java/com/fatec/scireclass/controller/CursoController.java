@@ -3,13 +3,31 @@ package com.fatec.scireclass.controller;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Locale;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import com.fatec.scireclass.model.Categoria;
+import com.fatec.scireclass.model.Curso;
+import com.fatec.scireclass.model.Endereco;
+import com.fatec.scireclass.model.mapper.CursoMapper;
+import com.fatec.scireclass.model.mapper.EnderecoMapper;
+import com.fatec.scireclass.repository.CategoriaRepository;
+import com.fatec.scireclass.repository.CursoRepository;
+import com.fatec.scireclass.repository.EnderecoRepository;
+import com.fatec.scireclass.repository.UsuarioRepository;
+import com.google.gson.Gson;
 
 import com.fatec.scireclass.model.dto.CursoFilterDTO;
-import com.fatec.scireclass.service.Base64Service;
+import com.fatec.scireclass.model.dto.EnderecoDTO;
+import com.fatec.scireclass.service.implementation.Base64Service;
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.model.dto.CadastroCursoDTO;
@@ -38,7 +54,17 @@ public class CursoController {
     @Autowired
     private UsuarioService usuarioService;
 
+    private static final Faker faker = new Faker(new Locale("pt-BR"));
+
     private static final String NOTFOUNDUSUARIO = "Não foi encontrado o usuário com o ID: ";
+    @Autowired
+    private CursoRepository cursoRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping
     public ResponseEntity<List<CursoDTO>> findAll() {
@@ -136,4 +162,107 @@ public class CursoController {
     public ResponseEntity<CursoDTO> avaliarCurso(@RequestBody CursoDTO cursoDTO){
         return new ResponseEntity<>(cursoService.avaliarCurso(cursoDTO), HttpStatus.OK);
     }
+
+    @PostMapping("/automatizarCurso")
+    public void automatizando(@RequestBody List<CursoDTO> cursoDTOs){
+        String[] ceps = {"01001000",
+                "01310000",
+                "01502001",
+                "02011000",
+                "02512000",
+                "03012000",
+                "03113000",
+                "04001001",
+                "04511000",
+                "05001000",
+                "05512000",
+                "06013000",
+                "07012001",
+                "08011000",
+                "08512000",
+                "09011000",
+                "09512000",
+                "10012001",
+                "11011000",
+                "12012000"
+        };
+        String[] numero = {"123",
+                "456",
+                "789",
+                "102",
+                "987",
+                "564",
+                "222",
+                "345",
+                "678",
+                "891",
+                "135",
+                "246",
+                "357",
+                "468",
+                "579",
+                "680",
+                "791",
+                "902",
+                "1234",
+                "5678"
+        };
+
+        int i = 0;
+        for(CursoDTO cursoDTO : cursoDTOs) {
+
+            String enderecoJson = buscarCep(ceps[i]);
+
+            if (enderecoJson != null) {
+                Gson gson = new Gson();
+                EnderecoDTO endereco = gson.fromJson(enderecoJson, EnderecoDTO.class);
+                endereco.setNumero(numero[i]);
+                Endereco endereco1 = EnderecoMapper.enderecoDTOToEndereco(endereco);
+                Curso curso = CursoMapper.cursoDTOToCurso(cursoDTO);
+                Categoria categoria = categoriaRepository.findCategoriaByNome(cursoDTO.getCategoria());
+                curso.setCategoria(categoria);
+                Usuario professor = usuarioRepository.findUsuarioByCategoriaOrCategoria2(cursoDTO.getCategoria(), cursoDTO.getCategoria());
+                curso.setCriador(professor);
+                curso = cursoRepository.save(curso);
+                endereco1 = enderecoRepository.save(endereco1);
+                curso.setEndereco(endereco1);
+                endereco1.setCurso(curso);
+                cursoRepository.save(curso);
+                enderecoRepository.save(endereco1);
+                i++;
+            } else {
+                System.out.println("Não foi possível buscar o endereço.");
+            }
+        }
+
+    }
+
+    public static String buscarCep(String cep) {
+        String urlString = "https://viacep.com.br/ws/" + cep + "/json/";
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Falha na requisição HTTP: " + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            StringBuilder response = new StringBuilder();
+            String output;
+            while ((output = br.readLine()) != null) {
+                response.append(output);
+            }
+
+            conn.disconnect();
+            return response.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

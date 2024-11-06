@@ -1,10 +1,11 @@
-package com.fatec.scireclass.service;
+package com.fatec.scireclass.service.implementation;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fatec.scireclass.service.MensagemService;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

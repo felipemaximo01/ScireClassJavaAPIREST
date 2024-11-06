@@ -1,4 +1,4 @@
-package com.fatec.scireclass.service;
+package com.fatec.scireclass.service.implementation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,10 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.fatec.scireclass.model.*;
-import com.fatec.scireclass.model.dto.MatriculaDTO;
 import com.fatec.scireclass.model.dto.VideoDTO;
 import com.fatec.scireclass.model.mapper.VideoMapper;
 import com.fatec.scireclass.repository.*;
+import com.fatec.scireclass.service.AulaService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fatec.scireclass.model.dto.AulaDTO;

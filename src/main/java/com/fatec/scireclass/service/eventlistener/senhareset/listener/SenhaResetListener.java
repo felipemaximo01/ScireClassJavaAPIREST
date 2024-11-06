@@ -3,7 +3,7 @@ package com.fatec.scireclass.service.eventlistener.senhareset.listener;
 
 import com.fatec.scireclass.service.eventlistener.senhareset.SenhaResetEvent;
 import com.fatec.scireclass.model.Usuario;
-import com.fatec.scireclass.service.EmailSenderService;
+import com.fatec.scireclass.service.implementation.EmailSenderService;
 import com.fatec.scireclass.service.TokenSenhaResetService;
 
 import org.springframework.beans.factory.annotation.Autowired;

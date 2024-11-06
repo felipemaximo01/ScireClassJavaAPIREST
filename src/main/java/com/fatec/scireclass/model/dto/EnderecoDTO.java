@@ -59,7 +59,19 @@ public class EnderecoDTO {
     public void setNumero(String numero) {
         this.numero = numero;
     }
-    
+
+    public String toString() {
+        return "EnderecoDTO {" +
+                "id='" + id + '\'' +
+                ", numero='" + numero + '\'' +
+                ", cep='" + cep + '\'' +
+                ", logradouro='" + logradouro + '\'' +
+                ", complemento='" + complemento + '\'' +
+                ", bairro='" + bairro + '\'' +
+                ", localidade='" + localidade + '\'' +
+                ", uf='" + uf + '\'' +
+                '}';
+    }
 
     
 }

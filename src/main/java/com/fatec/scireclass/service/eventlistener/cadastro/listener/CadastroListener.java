@@ -2,7 +2,7 @@ package com.fatec.scireclass.service.eventlistener.cadastro.listener;
 
 import com.fatec.scireclass.service.eventlistener.cadastro.CadastroEvent;
 import com.fatec.scireclass.model.Usuario;
-import com.fatec.scireclass.service.EmailSenderService;
+import com.fatec.scireclass.service.implementation.EmailSenderService;
 import com.fatec.scireclass.service.TokenVerificacaoService;
 
 import org.springframework.beans.factory.annotation.Autowired;

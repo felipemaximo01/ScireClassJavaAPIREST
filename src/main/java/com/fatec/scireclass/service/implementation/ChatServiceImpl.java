@@ -1,4 +1,4 @@
-package com.fatec.scireclass.service;
+package com.fatec.scireclass.service.implementation;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fatec.scireclass.model.Curso;
 import com.fatec.scireclass.repository.CursoRepository;
+import com.fatec.scireclass.service.ChatService;
 import com.fatec.scireclass.service.exceptions.ChatNotFoundException;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 import com.fatec.scireclass.service.exceptions.UsuarioUnauthorizedException;
 
 @Service
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
 
     @Autowired
     private ChatRepository chatRepository;

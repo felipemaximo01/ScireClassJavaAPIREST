@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fatec.scireclass.repository.UsuarioRepository;
-import com.fatec.scireclass.service.TokenService;
+import com.fatec.scireclass.service.implementation.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
