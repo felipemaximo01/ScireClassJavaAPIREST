@@ -1,8 +1,10 @@
 package com.fatec.scireclass.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +28,7 @@ public interface UsuarioRepository extends MongoRepository<Usuario, String> {
     Usuario findUsuarioByCategoriaOrCategoria2(String categoria, String categoria2);
 
     UserDetails getByEmail(String email);
+
+    @Query("{ 'cursoFavorito.0' : {$exists: true} }")
+    List<Usuario> findUsuariosWithFavoritos();
 }

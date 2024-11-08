@@ -5,25 +5,20 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fatec.scireclass.model.*;
+import com.fatec.scireclass.model.dto.CategoriaDTO;
+import com.fatec.scireclass.repository.*;
 import com.fatec.scireclass.service.UsuarioService;
 import com.fatec.scireclass.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fatec.scireclass.model.Curso;
-import com.fatec.scireclass.model.Endereco;
-import com.fatec.scireclass.model.TokenSenhaReset;
-import com.fatec.scireclass.model.Usuario;
 import com.fatec.scireclass.model.dto.EnderecoDTO;
 import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.enums.Perfil;
 import com.fatec.scireclass.model.mapper.EnderecoMapper;
 import com.fatec.scireclass.model.mapper.UsuarioMapper;
-import com.fatec.scireclass.repository.CursoRepository;
-import com.fatec.scireclass.repository.EnderecoRepository;
-import com.fatec.scireclass.repository.TokenSenhaResetRepository;
-import com.fatec.scireclass.repository.UsuarioRepository;
 import com.fatec.scireclass.service.exceptions.EmailInvalidoException;
 import com.fatec.scireclass.service.exceptions.UsuarioNotFoundException;
 
@@ -39,16 +34,20 @@ public class UsuarioServiceImpl implements UsuarioService {
     private EnderecoRepository enderecoRepository;
 
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @Override
-    public Usuario cadastrar(UsuarioDTO usuarioDTO,EnderecoDTO enderecoDTO) {
+    public Usuario cadastrar(UsuarioDTO usuarioDTO, EnderecoDTO enderecoDTO, CategoriaDTO categoriaDTO) {
         if(Boolean.FALSE.equals(encontrarEmail(usuarioDTO.getEmail()))) {
             if (validaEmail(usuarioDTO)){
                 Usuario usuario = UsuarioMapper.usuarioDTOToUsuario(usuarioDTO);
                 Endereco endereco = EnderecoMapper.enderecoDTOToEndereco(enderecoDTO);
+                Categoria categoria = categoriaRepository.findCategoriaById(categoriaDTO.getId());
                 usuario.setAtivo(false);
                 String encryptedPassword = new BCryptPasswordEncoder().encode(usuario.getSenha());
                 usuario.setSenha(encryptedPassword);
+                usuario.setAlunoPreferenciaInicial(categoria);
                 endereco = enderecoRepository.save(endereco);
                 usuario = this.usuarioRepository.save(usuario);
                 usuario.setEndereco(endereco);

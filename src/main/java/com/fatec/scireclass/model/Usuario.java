@@ -33,6 +33,7 @@ public class Usuario implements UserDetails {
     private Perfil perfil;
     private Boolean ativo;
     private Boolean aceitouTermos;
+    private Categoria alunoPreferenciaInicial;
     private String categoria;
     private String categoria2;
     @DBRef
@@ -193,5 +194,13 @@ public class Usuario implements UserDetails {
 
     public void setCategoria2(String categoria2) {
         this.categoria2 = categoria2;
+    }
+
+    public Categoria getAlunoPreferenciaInicial() {
+        return alunoPreferenciaInicial;
+    }
+
+    public void setAlunoPreferenciaInicial(Categoria alunoPreferenciaInicial) {
+        this.alunoPreferenciaInicial = alunoPreferenciaInicial;
     }
 }

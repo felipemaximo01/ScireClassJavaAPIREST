@@ -3,6 +3,7 @@ package com.fatec.scireclass.model.dto;
 public class CadastroDTO {
     private UsuarioDTO usuarioDTO;
     private EnderecoDTO enderecoDTO;
+    private CategoriaDTO categoriaDTO;
     
     public UsuarioDTO getUsuarioDTO() {
         return usuarioDTO;
@@ -17,5 +18,11 @@ public class CadastroDTO {
         this.enderecoDTO = enderecoDTO;
     }
 
-    
+    public CategoriaDTO getCategoriaDTO() {
+        return categoriaDTO;
+    }
+
+    public void setCategoriaDTO(CategoriaDTO categoriaDTO) {
+        this.categoriaDTO = categoriaDTO;
+    }
 }

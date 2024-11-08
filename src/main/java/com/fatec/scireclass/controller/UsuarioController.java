@@ -79,7 +79,7 @@ public class UsuarioController {
     @PostMapping("/save")
     public ResponseEntity<UsuarioDTO> cadastrarUsuario(@RequestBody CadastroDTO cadastroDTO, HttpServletRequest request) {
 
-        Usuario usuario = usuarioService.cadastrar(cadastroDTO.getUsuarioDTO(),cadastroDTO.getEnderecoDTO());
+        Usuario usuario = usuarioService.cadastrar(cadastroDTO.getUsuarioDTO(),cadastroDTO.getEnderecoDTO(), cadastroDTO.getCategoriaDTO());
         String appUrl = request.getContextPath();
         eventPublisher.publishEvent(new CadastroEvent(usuario,request.getLocale(), appUrl));
         return new ResponseEntity<>(UsuarioMapper.usuarioToUsuarioDTO(usuario), HttpStatus.OK);
