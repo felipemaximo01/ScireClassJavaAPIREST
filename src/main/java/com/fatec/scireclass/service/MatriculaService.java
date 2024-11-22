@@ -3,6 +3,7 @@ package com.fatec.scireclass.service;
 import java.util.List;
 
 import com.fatec.scireclass.model.dto.CursoDTO;
+import com.fatec.scireclass.model.dto.UsuarioDTO;
 import org.springframework.stereotype.Service;
 
 import com.fatec.scireclass.model.Matricula;
@@ -36,5 +37,11 @@ public interface MatriculaService {
     List<CursoDTO> findCursosByMatricula(String usuarioId);
 
     MatriculaDTO ativaMatricula(String cursoId, String alunoId, String chatId);
+
+    Integer quantidadeMatriculas(String usuarioId);
+
+    List<UsuarioDTO> meusAlunos(String usuarioId);
+
+    List<UsuarioDTO> alunosMatriculados(String cursoId);
 
 }

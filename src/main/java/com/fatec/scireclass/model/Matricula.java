@@ -18,7 +18,7 @@ public class Matricula {
     private Boolean ativo;
     @DBRef
     private Usuario aluno;
-    @DBRef
+    @DBRef(lazy = false)
     private Curso curso;
 
     @DBRef

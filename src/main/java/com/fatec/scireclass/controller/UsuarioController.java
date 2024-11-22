@@ -311,5 +311,10 @@ public class UsuarioController {
 
 
     }
+
+    @GetMapping("/fcmToken/{token}/{usuarioID}")
+    public void saveFcmToken(@PathVariable String token, @PathVariable String usuarioID){
+        usuarioService.fcmTokenSave(token, usuarioID);
+    }
     
 }

@@ -27,7 +27,7 @@ public class Curso {
     private Modalidade modalidade;
     private Boolean aceitouTermos;
     
-    @DBRef
+    @DBRef(lazy = false)
     private Usuario criador;
     @DBRef
     private List<Matricula> matriculas = new ArrayList<>();

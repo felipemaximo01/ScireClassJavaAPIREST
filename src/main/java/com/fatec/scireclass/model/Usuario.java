@@ -36,6 +36,7 @@ public class Usuario implements UserDetails {
     private Categoria alunoPreferenciaInicial;
     private String categoria;
     private String categoria2;
+    private String fcmToken;
     @DBRef
     private List<Chat> chat = new ArrayList<>();
     @DBRef
@@ -202,5 +203,13 @@ public class Usuario implements UserDetails {
 
     public void setAlunoPreferenciaInicial(Categoria alunoPreferenciaInicial) {
         this.alunoPreferenciaInicial = alunoPreferenciaInicial;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

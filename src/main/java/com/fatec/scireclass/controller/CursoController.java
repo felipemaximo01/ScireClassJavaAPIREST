@@ -115,9 +115,9 @@ public class CursoController {
     }
 
     @PutMapping("/alter/{cursoId}")
-    public ResponseEntity<CursoDTO> alterarCurso(@RequestBody CursoDTO cursoDTO, @PathVariable String cursoId) {
+    public ResponseEntity<CursoDTO> alterarCurso(@RequestBody CadastroCursoDTO cadastroCursoDTO, @PathVariable String cursoId) {
 
-        return new ResponseEntity<>(this.cursoService.alterarDadosCurso(cursoDTO,cursoId), HttpStatus.OK);
+        return new ResponseEntity<>(this.cursoService.alterarDadosCurso(cadastroCursoDTO.getCursoDTO(),cursoId), HttpStatus.OK);
     }
 
     @GetMapping("/favoritos/{usuarioId}")

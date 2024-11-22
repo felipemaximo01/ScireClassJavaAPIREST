@@ -4,12 +4,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fatec.scireclass.model.Notificacao;
 import com.fatec.scireclass.model.dto.CursoDTO;
 import com.fatec.scireclass.model.dto.MensagemDTO;
+import com.fatec.scireclass.model.dto.UsuarioDTO;
 import com.fatec.scireclass.model.mapper.CursoMapper;
+import com.fatec.scireclass.model.mapper.UsuarioMapper;
 import com.fatec.scireclass.service.ChatService;
 import com.fatec.scireclass.service.MatriculaService;
 import com.fatec.scireclass.service.MensagemService;
+import com.fatec.scireclass.service.NotificacaoService;
 import com.fatec.scireclass.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -41,6 +46,8 @@ public class MatriculaServiceImpl implements MatriculaService {
     private MongoTemplate mongoTemplate;
     @Autowired
     private MensagemService mensagemService;
+    @Autowired
+    private NotificacaoService notificacaoService;
 
     @Override
     public MatriculaDTO salvarMatricula(String usuarioId, String cursoId) {
@@ -67,6 +74,22 @@ public class MatriculaServiceImpl implements MatriculaService {
             matricula = this.matriculaRepository.save(matricula);
             curso.getMatriculas().add(matricula);
             cursoRepository.save(curso);
+            try {
+
+
+            Notificacao notificacao = new Notificacao();
+            notificacao.setMensagem(String.format("Nova matrícula no curso %s", matricula.getCurso().getNome()));
+            notificacao.setCursoId(matricula.getCurso().getId());
+            notificacao.setProfessorId(matricula.getCurso().getCriador().getId());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String mensagemJson = objectMapper.writeValueAsString(notificacao);
+
+            notificacaoService.enviarNotificacaoMatricula(mensagemJson);
+            }catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Erro ao publicar mensagem no Pub/Sub", e);
+            }
             return MatriculaMapper.matriculaToMatriculaDTO(matricula);
         }else if(curso.getModalidade().toString().equals("PRESENCIAL")){
             Matricula matricula = new Matricula();
@@ -80,6 +103,9 @@ public class MatriculaServiceImpl implements MatriculaService {
             cursoRepository.save(curso);
 
             chatService.createChat(usuario.getId(), curso.getCriador().getId(), curso.getId());
+
+            String mensagem = String.format("Nova matrícula no curso %s", matricula.getCurso().getNome());
+            notificacaoService.enviarNotificacaoMatricula(mensagem);
 
             return MatriculaMapper.matriculaToMatriculaDTO(matricula);
         }
@@ -236,11 +262,65 @@ public class MatriculaServiceImpl implements MatriculaService {
     }
 
     @Override
+    public Integer quantidadeMatriculas(String usuarioId) {
+
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
+
+        List<Curso> cursos = cursoRepository.findAllByCriador_Id(usuario.getId());
+
+        List<Matricula> matriculas = new ArrayList<>();
+        for (Curso curso : cursos) {
+            matriculas.addAll(matriculaRepository.findAllByCurso(curso));
+        }
+        return matriculas.size();
+    }
+
+    @Override
+    public List<UsuarioDTO> meusAlunos(String usuarioId) {
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
+
+        List<Curso> cursos = cursoRepository.findAllByCriador_Id(usuario.getId());
+
+        List<Matricula> matriculas = new ArrayList<>();
+        for (Curso curso : cursos) {
+            matriculas.addAll(matriculaRepository.findAllByCurso(curso));
+        }
+        List<UsuarioDTO> usuarioDTOs = new ArrayList<>();
+        int i = 0;
+        for (Matricula matricula : matriculas) {
+            if(i < 5) {
+                usuarioDTOs.add(UsuarioMapper.usuarioToUsuarioDTO(matricula.getAluno()));
+                i++;
+            }
+            else {
+                break;
+            }
+        }
+
+        return usuarioDTOs;
+    }
+
+    @Override
+    public List<UsuarioDTO> alunosMatriculados(String cursoId) {
+        Curso curso = cursoRepository.findCursoById(cursoId);
+
+        List<Matricula> matriculas = matriculaRepository.findAllByCurso(curso);
+
+        List<UsuarioDTO> usuarioDTOS = new ArrayList<>();
+
+        for (Matricula matricula : matriculas) {
+            usuarioDTOS.add(UsuarioMapper.usuarioToUsuarioDTO(matricula.getAluno()));
+        }
+
+        return usuarioDTOS;
+    }
+
+    @Override
     public List<MatriculaDTO> encontrarMatriculasPorCriador(String usuarioId) {
         Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
         if(usuario == null)
             throw new UsuarioNotFoundException("Não foi encontrado o usuario com ID: " + usuarioId);
-        List<Matricula> matriculas = this.matriculaRepository.findAllByCurso_Criador_Id(usuarioId);
+        List<Matricula> matriculas = this.matriculaRepository.findAllByCurso_Criador_Id(usuario.getId());
         List<MatriculaDTO> matriculasDTO = new ArrayList<>();
         for (Matricula matricula : matriculas) {
             MatriculaDTO matriculaDTO = new MatriculaDTO();

@@ -3,6 +3,7 @@ package com.fatec.scireclass.controller;
 import java.util.List;
 
 import com.fatec.scireclass.model.dto.CursoDTO;
+import com.fatec.scireclass.model.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,5 +94,20 @@ public class MatriculaController {
     @PostMapping("/ativa/{cursoId}/{alunoId}/{chatId}")
     public ResponseEntity<MatriculaDTO> ativaMatricula(@PathVariable String cursoId, @PathVariable String alunoId, @PathVariable String chatId){
         return new ResponseEntity<>(matriculaService.ativaMatricula(cursoId,alunoId,chatId), HttpStatus.OK);
+    }
+
+    @GetMapping("/quantidade/{usuarioId}")
+    public ResponseEntity<Integer> quantidadeMatriculas(@PathVariable String usuarioId){
+        return new ResponseEntity<>(matriculaService.quantidadeMatriculas(usuarioId), HttpStatus.OK);
+    }
+
+    @GetMapping("/alunosPorCurso/{cursoId}")
+    public ResponseEntity<List<UsuarioDTO>> alunosPorCurso(@PathVariable String cursoId){
+        return new ResponseEntity<>(matriculaService.alunosMatriculados(cursoId), HttpStatus.OK);
+    }
+
+    @GetMapping("/meusAlunos/{usuarioId}")
+    public ResponseEntity<List<UsuarioDTO>> meusAlunos(@PathVariable String usuarioId){
+        return new ResponseEntity<>(matriculaService.meusAlunos(usuarioId), HttpStatus.OK);
     }
 }

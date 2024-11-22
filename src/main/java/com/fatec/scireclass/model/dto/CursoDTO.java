@@ -22,6 +22,7 @@ public class CursoDTO {
     private String nomeCriador;
     private String pathThumbnail;
     private String categoria;
+    private Integer numeroDeMatricuals;
 
     public String getId() {
         return id;
@@ -148,5 +149,13 @@ public class CursoDTO {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public Integer getNumeroDeMatricuals() {
+        return numeroDeMatricuals;
+    }
+
+    public void setNumeroDeMatricuals(Integer numeroDeMatricuals) {
+        this.numeroDeMatricuals = numeroDeMatricuals;
     }
 }

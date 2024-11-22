@@ -243,4 +243,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return UsuarioMapper.usuarioToUsuarioDTO(usuario);
     }
+
+    @Override
+    public void fcmTokenSave(String token, String usuarioId) {
+        Usuario usuario = usuarioRepository.findUsuarioById(usuarioId);
+        if (usuario == null)
+            throw new ResourceNotFoundException("Usuario não encontrado");
+
+        usuario.setFcmToken(token);
+        usuarioRepository.save(usuario);
+    }
 }

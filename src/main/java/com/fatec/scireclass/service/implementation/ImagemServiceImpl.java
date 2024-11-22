@@ -69,7 +69,10 @@ public class ImagemServiceImpl implements ImagemService {
             throw new ResourceNotFoundException("Curso não encontrado");
         Imagem imagem = imagemRepository.findByCursoId(curso.getId());
         if(imagem == null)
-            throw new ResourceNotFoundException("Imagem não encontrada");
+            imagem = new Imagem();
+            imagem.setNome(curso.getCategoria().getNome());
+            imagem.setPath("categoria/"+curso.getCategoria().getNome()+".jpg");
+            imagem.setCurso(curso);
         return ImagemMapper.imagemToImagemDTO(imagem);
     }
 

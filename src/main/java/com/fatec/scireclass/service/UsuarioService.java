@@ -39,4 +39,6 @@ public interface UsuarioService {
     Usuario salvaUsuario(Usuario usuario);
 
     UsuarioDTO editarUsuario(UsuarioDTO usuarioDTO, EnderecoDTO enderecoDTO);
+
+    void fcmTokenSave(String token, String usuarioId);
 }

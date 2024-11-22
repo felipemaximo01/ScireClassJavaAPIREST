@@ -63,11 +63,14 @@ public class CursoMapper {
         if(curso.getAulas() != null) {
             if (curso.getAulas().isEmpty()) {
                 cursoDTO.setQuantidadeAulas(0);
+                cursoDTO.setMinutosTotalCurso(0);
             } else {
                 cursoDTO.setQuantidadeAulas(curso.getAulas().size());
                 cursoDTO.setMinutosTotalCurso(0);
                 for (Aula aula : curso.getAulas()) {
-                    cursoDTO.setMinutosTotalCurso(cursoDTO.getMinutosTotalCurso() + aula.getVideo().getDurationInMinutes());
+                    if(aula.getVideo() != null) {
+                        cursoDTO.setMinutosTotalCurso(cursoDTO.getMinutosTotalCurso() + aula.getVideo().getDurationInMinutes());
+                    }
                 }
             }
         }
@@ -75,6 +78,8 @@ public class CursoMapper {
             cursoDTO.setNomeCriador(curso.getCriador().getNome());
         if(curso.getImagem() != null)
             cursoDTO.setPathThumbnail(curso.getImagem().getPath());
+        else
+            cursoDTO.setPathThumbnail("categoria/"+curso.getCategoria().getNome()+".jpg");
         if(!curso.getAvaliacao().isEmpty()){
             Double avaliacao = 0.0;
             for(Double av2 : curso.getAvaliacao()){
@@ -83,6 +88,12 @@ public class CursoMapper {
             cursoDTO.setAvaliacao(avaliacao/curso.getAvaliacao().size());
         }else{
             cursoDTO.setAvaliacao(0.0);
+        }
+        if(curso.getMatriculas() != null){
+            cursoDTO.setNumeroDeMatricuals(curso.getMatriculas().size());
+        }
+        if(curso.getCategoria() != null){
+            cursoDTO.setCategoria(curso.getCategoria().getId());
         }
 
 
